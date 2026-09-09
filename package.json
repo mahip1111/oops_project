@@ -1,0 +1,17 @@
+{
+  "name": "quickflow-ecommerce-fulfillment-network",
+  "version": "2.0.0",
+  "private": true,
+  "description": "High-Performance Apple E-Commerce & C++ Dijkstra Logistics Fulfillment Network",
+  "scripts": {
+    "dev:store": "npm --prefix customer-store run dev",
+    "dev:admin": "npm --prefix admin-dashboard run dev",
+    "dev:api": "npm --prefix backend-api run start",
+    "build:store": "npm --prefix customer-store run build",
+    "build:admin": "npm --prefix admin-dashboard run build",
+    "docker:up": "docker compose up --build",
+    "docker:up:d": "docker compose up --build -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  }
+}

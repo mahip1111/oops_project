@@ -1,0 +1,66 @@
+services:
+  # 1. Backend REST & WebSocket API Gateway (Live Watch)
+  backend-api:
+    build:
+      context: ./backend-api
+      dockerfile: Dockerfile
+    container_name: quickflow_backend_api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=development
+    volumes:
+      - ./backend-api:/app
+      - /app/node_modules
+    networks:
+      - quickflow_net
+
+  # 2. Customer Storefront Web Application (Vite Hot Module Replacement)
+  customer-store:
+    build:
+      context: ./customer-store
+      dockerfile: Dockerfile
+    container_name: quickflow_customer_store
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./customer-store:/app
+      - /app/node_modules
+    depends_on:
+      - backend-api
+    networks:
+      - quickflow_net
+
+  # 3. Operations Admin Command Center (Vite Hot Module Replacement)
+  admin-dashboard:
+    build:
+      context: ./admin-dashboard
+      dockerfile: Dockerfile
+    container_name: quickflow_admin_dashboard
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./admin-dashboard:/app
+      - /app/node_modules
+    depends_on:
+      - backend-api
+    networks:
+      - quickflow_net
+
+  # 4. C++ FastRoute Dijkstra Routing Engine
+  cpp-engine:
+    build:
+      context: ./cpp-engine
+      dockerfile: Dockerfile
+    container_name: quickflow_cpp_engine
+    restart: "no"
+    networks:
+      - quickflow_net
+
+networks:
+  quickflow_net:
+    driver: bridge

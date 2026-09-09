@@ -1,0 +1,268 @@
+/* QUICKFLOW - Customer Store Design System & Exact Color Schema */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ────────── EXACT SPECIFIED COLOR SCHEMA ────────── */
+  --color-primary: #0F172A;        /* Deep Navy */
+  --color-primary-light: #1E293B;  /* Slate */
+  --color-accent: #2563EB;         /* Electric Blue */
+  --color-accent-hover: #1D4ED8;   /* Bright Blue */
+  --color-bg: #F8FAFC;             /* Off White */
+  --color-surface: #FFFFFF;        /* White */
+  --color-text: #0F172A;           /* Dark */
+  --color-text-secondary: #64748B; /* Slate */
+  --color-border: #E2E8F0;         /* Light Gray */
+  --color-success: #16A34A;        /* Green */
+  --color-error: #DC2626;          /* Red */
+
+  /* ────────── ALIASED TOKENS FOR BACKWARD COMPATIBILITY ────────── */
+  --color-apple-blue: var(--color-accent);
+  --color-apple-blue-hover: var(--color-accent-hover);
+  --color-link-blue: var(--color-accent);
+  --color-signal-blue: #3b82f6;
+  --color-carbon: var(--color-primary);
+  --color-smoke: var(--color-primary-light);
+  --color-graphite: var(--color-text-secondary);
+  --color-ash: var(--color-text-secondary);
+  --color-mist: #94a3b8;
+  --color-onyx: #020617;
+  --color-pebble: #e2e8f0;
+  --color-border-subtle: #e2e8f0;
+
+  /* Surfaces & Backgrounds */
+  --bg-main: var(--color-bg);
+  --bg-card: var(--color-surface);
+  --bg-card-hover: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.92);
+  --bg-dark-card: var(--color-primary);
+  
+  --surface-canvas: var(--color-bg);
+  --surface-elevated-wash: #f1f5f9;
+  --surface-white: var(--color-surface);
+  --surface-pebble: #e2e8f0;
+
+  /* Typography */
+  --text-main: var(--color-text);
+  --text-muted: var(--color-text-secondary);
+  --text-faint: #94a3b8;
+
+  --accent-blue: var(--color-accent);
+  --accent-cyan: #0284c7;
+  --accent-emerald: var(--color-success);
+  --accent-green: var(--color-success);
+  --accent-amber: #f59e0b;
+  --accent-rose: var(--color-error);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', "Segoe UI", Roboto, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'Outfit', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+  --shadow-card: 0 4px 16px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.02);
+  --shadow-card-hover: 0 12px 32px rgba(15, 23, 42, 0.09);
+  --shadow-modal: 0 24px 60px rgba(15, 23, 42, 0.16);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Frosted Glass Navbar */
+.glass-nav {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
+}
+
+/* Product Card - Clean Surface */
+.product-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Accent Electric Blue Button */
+.btn-quickflow {
+  background: var(--color-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 22px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-quickflow:hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.btn-quickflow:active {
+  transform: scale(0.98);
+}
+
+/* Deep Navy Button */
+.btn-dark {
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 22px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-dark:hover {
+  background: var(--color-primary-light);
+}
+
+/* Outlined Ghost Button */
+.btn-ghost {
+  background: #ffffff;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* Color Status Badges */
+.badge-apple-blue {
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--color-accent);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.badge-apple-green {
+  background: rgba(22, 163, 74, 0.08);
+  color: var(--color-success);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.badge-apple-amber {
+  background: rgba(245, 158, 11, 0.08);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.badge-apple-red {
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--color-error);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+/* Clean Form Inputs */
+.quickflow-input {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: #ffffff;
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.quickflow-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideLeft {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.pulse-beacon {
+  animation: pulseGlow 2s infinite;
+}
