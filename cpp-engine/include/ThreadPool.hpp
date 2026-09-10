@@ -1,13 +1,11 @@
 #pragma once
 #include <vector>
 #include <queue>
-#include <thread>
-#include <mutex>
-#include <condition_variable>
 #include <functional>
-#include <future>
 #include <atomic>
 #include <iostream>
+#include <memory>
+#include "Compat.hpp"
 
 class ThreadPool {
 private:
@@ -42,15 +40,39 @@ public:
         }
     }
 
+#if defined(_WIN32) && defined(__MINGW32__) && !defined(_GLIBCXX_HAS_GTHREADS)
     template<class F, class... Args>
-    auto enqueue(F&& f, Args&&... args) 
-        -> std::future<typename std::invoke_result<F, Args...>::type> {
-        using return_type = typename std::invoke_result<F, Args...>::type;
+    auto enqueue(F&& f, Args&&... args) -> std::future<decltype(f(args...))> {
+        using return_type = decltype(f(args...));
+
+        auto result_val = std::make_shared<return_type>();
+        auto ready_flag = std::make_shared<bool>(false);
+        auto bound_task = std::bind(std::forward<F>(f), std::forward<Args>(args)...);
+
+        auto wrapper = [bound_task, result_val, ready_flag]() mutable {
+            *result_val = bound_task();
+            *ready_flag = true;
+        };
+
+        {
+            std::unique_lock<std::mutex> lock(queueMutex);
+            if (stop) {
+                throw std::runtime_error("enqueue on stopped ThreadPool");
+            }
+            taskQueue.emplace(wrapper);
+        }
+        condition.notify_one();
+        return std::future<return_type>(result_val, ready_flag);
+    }
+#else
+    template<class F, class... Args>
+    auto enqueue(F&& f, Args&&... args) -> std::future<decltype(f(args...))> {
+        using return_type = decltype(f(args...));
 
         auto task = std::make_shared<std::packaged_task<return_type()>>(
             std::bind(std::forward<F>(f), std::forward<Args>(args)...)
         );
-        
+
         std::future<return_type> res = task->get_future();
         {
             std::unique_lock<std::mutex> lock(queueMutex);
@@ -62,6 +84,7 @@ public:
         condition.notify_one();
         return res;
     }
+#endif
 
     ~ThreadPool() {
         stop = true;

@@ -8,7 +8,10 @@ import {
   XCircle,
   ArrowUpRight,
   BrainCircuit,
-  RotateCcw
+  RotateCcw,
+  ArrowRight,
+  ShieldAlert,
+  ShieldCheck
 } from 'lucide-react';
 import { DecisionExplainModal } from '../Modals/AdminModals';
 
@@ -16,11 +19,13 @@ export default function OrdersSection({
   metrics,
   orders,
   onRetryFailedOrder,
-  onOpenDispatchModal
+  onOpenDispatchModal,
+  onTransitionOrderState
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState('all');
   const [selectedOrderForExplanation, setSelectedOrderForExplanation] = useState(null);
+  const [transitioningOrderId, setTransitioningOrderId] = useState(null);
 
   // Filter orders based on search & active status
   const filteredOrders = orders.filter((ord) => {
@@ -53,13 +58,43 @@ export default function OrdersSection({
     if (s.includes('COMPLETED') || s.includes('DELIVERED')) {
       return <span className="badge badge-success">● {status}</span>;
     }
-    if (s.includes('FAILED') || s.includes('QUARANTINED')) {
+    if (s.includes('FAILED') || s.includes('QUARANTINED') || s.includes('REPROCESSING')) {
       return <span className="badge badge-danger">● {status}</span>;
     }
-    if (s.includes('PENDING') || s.includes('ALLOCATED')) {
+    if (s.includes('PENDING') || s.includes('ALLOCATED') || s.includes('CONFIRMED')) {
       return <span className="badge badge-warning">● {status}</span>;
     }
     return <span className="badge badge-info">● {status}</span>;
+  };
+
+  const getNextValidState = (current) => {
+    const s = (current || '').toUpperCase();
+    if (s === 'CREATED') return 'CONFIRMED';
+    if (s === 'CONFIRMED') return 'ALLOCATED';
+    if (s === 'ALLOCATED') return 'PICKING';
+    if (s === 'PICKING') return 'PACKING';
+    if (s === 'PACKING') return 'QUALITY_CHECK';
+    if (s === 'QUALITY_CHECK') return 'SHIPPED';
+    if (s === 'SHIPPED') return 'DELIVERED';
+    if (s === 'REPROCESSING') return 'PICKING';
+    return null;
+  };
+
+  const handleAdvanceState = async (order) => {
+    const next = getNextValidState(order.status);
+    if (!next || !onTransitionOrderState) return;
+    setTransitioningOrderId(order.id);
+    await onTransitionOrderState(order.id, next, `Operator advanced state to ${next}`);
+    setTransitioningOrderId(null);
+  };
+
+  const handleTestInvalidTransition = async (order) => {
+    if (!onTransitionOrderState) return;
+    setTransitioningOrderId(order.id);
+    // Deliberately trigger an invalid leap (e.g. directly to DELIVERED or jumping backwards)
+    const invalidTarget = (order.status === 'DELIVERED' ? 'PICKING' : 'DELIVERED');
+    await onTransitionOrderState(order.id, invalidTarget, `Test invalid jump to ${invalidTarget}`);
+    setTransitioningOrderId(null);
   };
 
   return (
@@ -69,14 +104,14 @@ export default function OrdersSection({
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <h1 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-              Orders Telemetry & Management
+              Orders Telemetry & State Machine Manager
             </h1>
             <span className="badge badge-info">
-              PRD Section 1 & 4
+              PRD Phase 1 & 3
             </span>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: '4px 0 0' }}>
-            Real-time tracking of <strong>{metrics.orders.total.toLocaleString()}</strong> orders with C++ Decision Scoring & Explainability
+            Real-time tracking of <strong>{metrics.orders.total.toLocaleString()}</strong> orders with C++ Decision Scoring & State Machine Protection
           </p>
         </div>
 
@@ -181,7 +216,7 @@ export default function OrdersSection({
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Failed
+              Failed / Quarantined
             </span>
             <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--danger-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <XCircle size={16} color="var(--danger)" />
@@ -244,55 +279,91 @@ export default function OrdersSection({
                 <th>Destination</th>
                 <th>Priority</th>
                 <th>Assigned Hub</th>
-                <th>Decision Score</th>
+                <th>Cost Score</th>
                 <th>Status</th>
                 <th>Total Value</th>
-                <th>Actions</th>
+                <th>State Machine & Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredOrders.map((ord) => (
-                <tr key={ord.id}>
-                  <td style={{ fontWeight: 700, fontFamily: 'var(--font-mono)', color: 'var(--primary)' }}>{ord.id}</td>
-                  <td style={{ fontWeight: 600 }}>{ord.customer || 'Customer'}</td>
-                  <td>{ord.destination || ord.city || 'Bhubaneswar'}</td>
-                  <td>{getPriorityBadge(ord.priority)}</td>
-                  <td>
-                    <span style={{ fontWeight: 600 }}>{ord.hub || 'Mumbai MegaPort'}</span>
-                  </td>
-                  <td>
-                    <span className="badge badge-info">
-                      {ord.decisionExplanation?.winningScore || '88.4'}/100
-                    </span>
-                  </td>
-                  <td>{getStatusBadge(ord.status)}</td>
-                  <td style={{ fontWeight: 700, fontFamily: 'var(--font-mono)' }}>₹{Number(ord.totalValue || ord.total || 158299).toLocaleString('en-IN')}</td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '6px' }}>
-                      <button
-                        onClick={() => setSelectedOrderForExplanation(ord)}
-                        className="btn-secondary"
-                        style={{ padding: '4px 8px', fontSize: '11.5px', display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--primary)' }}
-                        title="Explain C++ Decision"
-                      >
-                        <BrainCircuit size={13} />
-                        <span>Explain</span>
-                      </button>
+              {filteredOrders.map((ord) => {
+                const nextState = getNextValidState(ord.status);
+                const isWorking = transitioningOrderId === ord.id;
+                const costScore = ord.evaluationResult?.winningCostScore || ord.decisionExplanation?.winningScore || 182.2;
 
-                      {ord.status === 'Failed' && (
+                return (
+                  <tr key={ord.id}>
+                    <td style={{ fontWeight: 700, fontFamily: 'var(--font-mono)', color: 'var(--primary)' }}>{ord.id}</td>
+                    <td style={{ fontWeight: 600 }}>{ord.customer || 'Customer'}</td>
+                    <td>{ord.destination || ord.city || 'Bhubaneswar'}</td>
+                    <td>{getPriorityBadge(ord.priority)}</td>
+                    <td>
+                      <span style={{ fontWeight: 600 }}>{ord.hub || ord.hubCode || 'Mumbai MegaPort'}</span>
+                    </td>
+                    <td>
+                      <span className="badge badge-info">
+                        {costScore} pts
+                      </span>
+                    </td>
+                    <td>{getStatusBadge(ord.status)}</td>
+                    <td style={{ fontWeight: 700, fontFamily: 'var(--font-mono)' }}>₹{Number(ord.totalValue || ord.total || 158299).toLocaleString('en-IN')}</td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        
+                        {/* Explain C++ Decision */}
                         <button
-                          onClick={() => onRetryFailedOrder(ord.id)}
-                          className="btn-danger"
-                          style={{ padding: '4px 8px', fontSize: '11.5px' }}
+                          onClick={() => setSelectedOrderForExplanation(ord)}
+                          className="btn-secondary"
+                          style={{ padding: '4px 8px', fontSize: '11.5px', display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--primary)' }}
+                          title="Explain C++ Hub Decision"
                         >
-                          <RotateCcw size={12} />
-                          <span>Retry</span>
+                          <BrainCircuit size={13} />
+                          <span>Explain</span>
                         </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+
+                        {/* Advance State (Valid State Machine Transition) */}
+                        {nextState && (
+                          <button
+                            onClick={() => handleAdvanceState(ord)}
+                            disabled={isWorking}
+                            className="btn-primary"
+                            style={{ padding: '4px 8px', fontSize: '11px', display: 'flex', alignItems: 'center', gap: '3px' }}
+                            title={`Advance state to ${nextState}`}
+                          >
+                            <ArrowRight size={12} />
+                            <span>→ {nextState}</span>
+                          </button>
+                        )}
+
+                        {/* Test Invalid Transition (Verify Rejection Protection) */}
+                        {ord.status !== 'DELIVERED' && (
+                          <button
+                            onClick={() => handleTestInvalidTransition(ord)}
+                            disabled={isWorking}
+                            className="btn-secondary"
+                            style={{ padding: '4px 6px', fontSize: '10.5px', color: 'var(--text-muted)' }}
+                            title="Test invalid state transition to verify rejection protection"
+                          >
+                            <ShieldAlert size={12} color="var(--warning)" />
+                            <span>Test Rejection</span>
+                          </button>
+                        )}
+
+                        {ord.status === 'Failed' && (
+                          <button
+                            onClick={() => onRetryFailedOrder(ord.id)}
+                            className="btn-danger"
+                            style={{ padding: '4px 8px', fontSize: '11.5px' }}
+                          >
+                            <RotateCcw size={12} />
+                            <span>Retry</span>
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

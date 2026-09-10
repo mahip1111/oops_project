@@ -1,40 +1,45 @@
-/* Enterprise Admin Dashboard - QuickFlow Modern SaaS Design System */
+/* Enterprise Admin Dashboard - QuickFlow High-Performance Logistics & Operations System */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* ────────── CORE BRAND & STATUS PALETTE ────────── */
+  /* ────────── 1. DESIGN SYSTEM COLOR PALETTE ────────── */
+  /* Primary Action (Blue) */
   --primary: #2563EB;
   --primary-hover: #1D4ED8;
-  --primary-subtle: rgba(37, 99, 235, 0.1);
-  --primary-border: rgba(37, 99, 235, 0.25);
+  --primary-subtle: rgba(37, 99, 235, 0.08);
+  --primary-border: rgba(37, 99, 235, 0.22);
 
-  --success: #10B981;
-  --success-hover: #059669;
-  --success-subtle: rgba(16, 185, 129, 0.1);
-  --success-border: rgba(16, 185, 129, 0.25);
+  /* Success / Healthy / Optimal (Green) */
+  --success: #16A34A;
+  --success-hover: #15803D;
+  --success-subtle: rgba(22, 163, 74, 0.08);
+  --success-border: rgba(22, 163, 74, 0.22);
 
-  --warning: #F59E0B;
-  --warning-hover: #D97706;
-  --warning-subtle: rgba(245, 158, 11, 0.1);
-  --warning-border: rgba(245, 158, 11, 0.25);
+  /* Warning / Heavy / Pending (Amber/Orange) */
+  --warning: #D97706;
+  --warning-hover: #B45309;
+  --warning-subtle: rgba(217, 119, 6, 0.08);
+  --warning-border: rgba(217, 119, 6, 0.22);
 
-  --danger: #EF4444;
-  --danger-hover: #DC2626;
-  --danger-subtle: rgba(239, 68, 68, 0.1);
-  --danger-border: rgba(239, 68, 68, 0.25);
+  /* Critical / Error / Delayed (Red) */
+  --danger: #DC2626;
+  --danger-hover: #B91C1C;
+  --danger-subtle: rgba(220, 38, 38, 0.08);
+  --danger-border: rgba(220, 38, 38, 0.22);
 
-  --info: #0EA5E9;
-  --info-hover: #0284C7;
-  --info-subtle: rgba(14, 165, 233, 0.1);
-  --info-border: rgba(14, 165, 233, 0.25);
+  /* Informational (Cyan / Light Blue) */
+  --info: #0284C7;
+  --info-hover: #0369A1;
+  --info-subtle: rgba(2, 132, 199, 0.08);
+  --info-border: rgba(2, 132, 199, 0.22);
 
-  --purple: #8B5CF6;
-  --purple-hover: #7C3AED;
-  --purple-subtle: rgba(139, 92, 246, 0.1);
-  --purple-border: rgba(139, 92, 246, 0.25);
+  --purple: #7C3AED;
+  --purple-hover: #6D28D9;
+  --purple-subtle: rgba(124, 58, 237, 0.08);
+  --purple-border: rgba(124, 58, 237, 0.22);
 
-  /* ────────── LIGHT THEME (DEFAULT) ────────── */
+  /* ────────── 2. LIGHT THEME (DEFAULT) ────────── */
   --background: #F8FAFC;
   --bg-primary: #F8FAFC;
   --bg-page: #F8FAFC;
@@ -49,43 +54,44 @@
 
   --sidebar: #0F172A;
   --sidebar-hover: #1E293B;
-  --sidebar-text: #CBD5E1;
-  --sidebar-active-bg: #2563EB;
-  --sidebar-active-text: #FFFFFF;
+  --sidebar-text: #94A3B8;
+  --sidebar-active-bg: rgba(37, 99, 235, 0.15);
+  --sidebar-active-text: #60A5FA;
 
-  /* Typography */
-  --text-primary: #0F172A;
+  /* Typography Hierarchy */
+  --text-primary: #0F172A;        /* Headings & primary text */
   --text-main: #0F172A;
   --text-heading: #0F172A;
   --text-color: #0F172A;
 
-  --text-secondary: #475569;
-  --text-muted: #94A3B8;
-  --text-dim: #64748B;
-  --text-faint: #94A3B8;
+  --text-secondary: #475569;      /* Subtitles & table metadata */
+  --text-muted: #64748B;          /* Supporting captions */
+  --text-dim: #94A3B8;            /* Inactive / subtle labels */
+  --text-faint: #CBD5E1;          /* Disabled states */
 
   /* Borders */
   --border: #E2E8F0;
   --border-color: #E2E8F0;
-  --border-subtle: #E2E8F0;
+  --border-subtle: #F1F5F9;
   --border-card: #E2E8F0;
   --border-active: #2563EB;
   --border-focus: #2563EB;
 
-  /* Accent aliases */
+  /* Accent Aliases */
   --accent: #2563EB;
   --accent-blue: #2563EB;
   --accent-blue-hover: #1D4ED8;
-  --accent-emerald: #10B981;
-  --accent-amber: #F59E0B;
-  --accent-rose: #EF4444;
-  --accent-cyan: #0EA5E9;
+  --accent-emerald: #16A34A;
+  --accent-amber: #D97706;
+  --accent-rose: #DC2626;
+  --accent-cyan: #0284C7;
   --accent-indigo: #4F46E5;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Shadows */
+  /* Elevation Shadows */
   --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
   --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
   --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03);
@@ -93,7 +99,7 @@
   --shadow-modal: 0 20px 40px rgba(15, 23, 42, 0.16);
 }
 
-/* ────────── DARK THEME ────────── */
+/* ────────── 3. DARK THEME ────────── */
 [data-theme="dark"] {
   --background: #090D16;
   --bg-primary: #090D16;
@@ -107,16 +113,36 @@
   --surface-hover: #1E293B;
   --bg-hover: #1E293B;
 
-  --sidebar: #020617;
+  --sidebar: #060911;
   --sidebar-hover: #1E293B;
-  --sidebar-text: #CBD5E1;
-  --sidebar-active-bg: #2563EB;
-  --sidebar-active-text: #FFFFFF;
+  --sidebar-text: #94A3B8;
+  --sidebar-active-bg: rgba(59, 130, 246, 0.2);
+  --sidebar-active-text: #60A5FA;
 
   --primary: #3B82F6;
   --primary-hover: #60A5FA;
   --primary-subtle: rgba(59, 130, 246, 0.15);
   --primary-border: rgba(59, 130, 246, 0.35);
+
+  --success: #10B981;
+  --success-hover: #34D399;
+  --success-subtle: rgba(16, 185, 129, 0.15);
+  --success-border: rgba(16, 185, 129, 0.35);
+
+  --warning: #F59E0B;
+  --warning-hover: #FBBF24;
+  --warning-subtle: rgba(245, 158, 11, 0.15);
+  --warning-border: rgba(245, 158, 11, 0.35);
+
+  --danger: #EF4444;
+  --danger-hover: #F87171;
+  --danger-subtle: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.35);
+
+  --info: #38BDF8;
+  --info-hover: #7DD3FC;
+  --info-subtle: rgba(56, 189, 248, 0.15);
+  --info-border: rgba(56, 189, 248, 0.35);
 
   --text-primary: #F8FAFC;
   --text-main: #F8FAFC;
@@ -126,7 +152,7 @@
   --text-secondary: #94A3B8;
   --text-muted: #64748B;
   --text-dim: #64748B;
-  --text-faint: #64748B;
+  --text-faint: #475569;
 
   --border: #1E293B;
   --border-color: #1E293B;
@@ -152,21 +178,26 @@ html, body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100vh;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Tabular figures for numbers */
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Tabular figures for monospace numbers */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
 /* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
@@ -200,7 +231,7 @@ html, body {
   border-color: #334155;
 }
 
-/* Status Badges */
+/* Consistent Status Badges */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -246,6 +277,21 @@ html, body {
   background: var(--bg-surface-elevated);
   color: var(--text-secondary);
   border: 1px solid var(--border);
+}
+
+/* OOPs Architectural Pattern Tag */
+.pattern-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.22);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
 }
 
 /* Pulsing Status Dot */

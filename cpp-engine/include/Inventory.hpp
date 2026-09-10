@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
-#include <mutex>
+#include "Compat.hpp"
 #include <memory>
 #include <vector>
 #include <sstream>
@@ -86,8 +86,8 @@ public:
     std::vector<InventoryItem> getAllStock() const {
         std::lock_guard<std::mutex> lock(inventoryMutex);
         std::vector<InventoryItem> list;
-        for (const auto& [sku, item] : items) {
-            list.push_back(item);
+        for (const auto& pair : items) {
+            list.push_back(pair.second);
         }
         return list;
     }

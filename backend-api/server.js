@@ -409,6 +409,27 @@ app.get('/api/orders/:id/status', (req, res) => {
   }
 });
 
+// Order State Machine Definition & Protection (PRD Section 4 & 7)
+const ORDER_STATE_FLOW = {
+  'CREATED': { next: ['CONFIRMED'], index: 0 },
+  'CONFIRMED': { next: ['ALLOCATED'], index: 1 },
+  'ALLOCATED': { next: ['PICKING'], index: 2 },
+  'PICKING': { next: ['PACKING'], index: 3 },
+  'PACKING': { next: ['QUALITY_CHECK'], index: 4 },
+  'QUALITY_CHECK': { next: ['SHIPPED', 'REPROCESSING'], index: 5 },
+  'REPROCESSING': { next: ['PICKING'], index: 8 },
+  'SHIPPED': { next: ['DELIVERED'], index: 6 },
+  'DELIVERED': { next: [], index: 7 } // Terminal State
+};
+
+function canTransitionOrderState(currentState, targetState) {
+  const current = (currentState || 'CREATED').toUpperCase();
+  const target = (targetState || '').toUpperCase();
+  const config = ORDER_STATE_FLOW[current];
+  if (!config) return false;
+  return config.next.includes(target);
+}
+
 // 6. GET /api/orders/:id (PRD Section 9)
 app.get('/api/orders/:id', (req, res) => {
   const order = ordersList.find(o => o.id.toLowerCase() === req.params.id.toLowerCase());
@@ -417,6 +438,94 @@ app.get('/api/orders/:id', (req, res) => {
   } else {
     res.status(404).json({ error: 'Order not found' });
   }
+});
+
+// POST /api/orders/:id/transition (PRD Section 4, 5, 7: State Machine with Invalid-Transition Protection)
+app.post('/api/orders/:id/transition', (req, res) => {
+  const order = ordersList.find(o => o.id.toLowerCase() === req.params.id.toLowerCase());
+  if (!order) {
+    return res.status(404).json({ success: false, error: 'Order not found' });
+  }
+
+  const { targetState, reason = '' } = req.body;
+  if (!targetState) {
+    return res.status(400).json({ success: false, error: 'Missing targetState parameter' });
+  }
+
+  const targetUpper = targetState.toUpperCase();
+  const currentUpper = (order.status || 'CREATED').toUpperCase();
+
+  if (!canTransitionOrderState(currentUpper, targetUpper)) {
+    const allowed = ORDER_STATE_FLOW[currentUpper]?.next || [];
+    return res.status(400).json({
+      success: false,
+      error: 'INVALID_TRANSITION',
+      message: `Invalid state transition from '${currentUpper}' to '${targetUpper}'. Transition rejected by Order State Machine.`,
+      currentState: currentUpper,
+      attemptedState: targetUpper,
+      allowedTransitions: allowed
+    });
+  }
+
+  // Apply valid transition
+  order.status = targetUpper;
+  order.stateMachineIndex = ORDER_STATE_FLOW[targetUpper]?.index ?? order.stateMachineIndex;
+
+  // Update tasks based on stage
+  if (targetUpper === 'PACKING') {
+    order.tasks.filter(t => t.type === 'PICK_ITEM').forEach(t => t.status = 'COMPLETED');
+    const packTask = order.tasks.find(t => t.type === 'PACK_ORDER');
+    if (packTask) {
+      packTask.status = 'IN_PROGRESS';
+      packTask.assignedWorkerId = 'WRK-203';
+    }
+  } else if (targetUpper === 'QUALITY_CHECK') {
+    const packTask = order.tasks.find(t => t.type === 'PACK_ORDER');
+    if (packTask) packTask.status = 'COMPLETED';
+    const qcTask = order.tasks.find(t => t.type === 'QUALITY_CHECK');
+    if (qcTask) {
+      qcTask.status = 'IN_PROGRESS';
+      qcTask.assignedWorkerId = 'WRK-202';
+    }
+  } else if (targetUpper === 'SHIPPED') {
+    const qcTask = order.tasks.find(t => t.type === 'QUALITY_CHECK');
+    if (qcTask) qcTask.status = 'COMPLETED';
+    const shipTask = order.tasks.find(t => t.type === 'SHIP_ORDER');
+    if (shipTask) {
+      shipTask.status = 'COMPLETED';
+      shipTask.assignedWorkerId = 'WRK-204';
+    }
+  } else if (targetUpper === 'REPROCESSING') {
+    const qcTask = order.tasks.find(t => t.type === 'QUALITY_CHECK');
+    if (qcTask) qcTask.status = 'FAILED';
+    const pickTasks = order.tasks.filter(t => t.type === 'PICK_ITEM');
+    pickTasks.forEach(t => { t.status = 'PENDING'; t.assignedWorkerId = 'UNASSIGNED'; });
+  }
+
+  const nowTime = new Date().toLocaleTimeString();
+  order.events.push({
+    time: nowTime,
+    message: reason || `Order State Advanced -> ${targetUpper}`,
+    node: order.hubCode || 'API-GATEWAY'
+  });
+
+  logSystemEvent('StageChanged', order.id, order.hubCode || 'API-GATEWAY', `Order #${order.id} transitioned to state ${targetUpper}`);
+
+  broadcast({
+    type: 'ORDER_UPDATED',
+    data: order
+  });
+
+  res.json({
+    success: true,
+    message: `Order #${order.id} successfully transitioned to ${targetUpper}`,
+    order
+  });
+});
+
+app.put('/api/orders/:id/status', (req, res) => {
+  req.body.targetState = req.body.status || req.body.targetState;
+  return app._router.handle({ ...req, method: 'POST', url: `/api/orders/${req.params.id}/transition` }, res);
 });
 
 // 7. POST /api/orders (PRD Section 9)
@@ -833,15 +942,13 @@ app.get('/api/security/roles', (req, res) => {
   });
 });
 
-// 16. POST /api/simulation (and /api/simulate) (PRD Section 11)
-const handleSimulation = (req, res) => {
-  const {
-    orderCount = 50000,
-    workerCount = 30,
-    activeHubs = ['DEL-01', 'BOM-04', 'HYD-02', 'CCU-03'],
-    strategy = 'Hybrid'
-  } = req.body;
-
+// 16. What-If Simulation Engine (PRD Section 5 & 6)
+function executeSimulationCalculation({
+  orderCount = 50000,
+  workerCount = 30,
+  activeHubs = ['DEL-01', 'BOM-04', 'HYD-02', 'CCU-03'],
+  strategy = 'Hybrid'
+}) {
   const N = Math.max(1, parseInt(orderCount));
   const W = Math.max(1, parseInt(workerCount));
   const H = Math.max(1, activeHubs.length);
@@ -850,15 +957,20 @@ const handleSimulation = (req, res) => {
   let strategyEfficiencyFactor = 1.0;
   let slaProtectionFactor = 1.0;
 
-  if (strategy === 'Hybrid' || strategy === 'PRIORITY_EDF') {
+  const normalizedStrategy = (strategy === 'PRIORITY_EDF' ? 'Hybrid' : strategy);
+
+  if (normalizedStrategy === 'Hybrid') {
     strategyEfficiencyFactor = 0.93;
     slaProtectionFactor = 0.30;
-  } else if (strategy === 'Priority') {
+  } else if (normalizedStrategy === 'Priority') {
     strategyEfficiencyFactor = 0.95;
     slaProtectionFactor = 0.40;
-  } else if (strategy === 'Deadline') {
+  } else if (normalizedStrategy === 'Deadline') {
     strategyEfficiencyFactor = 0.94;
     slaProtectionFactor = 0.35;
+  } else { // FIFO
+    strategyEfficiencyFactor = 1.0;
+    slaProtectionFactor = 1.0;
   }
 
   const totalWorkSeconds = N * baseTaskSecondsPerOrder * strategyEfficiencyFactor;
@@ -904,17 +1016,17 @@ const handleSimulation = (req, res) => {
   let recommendation = '';
   if (W < 35 && N >= 40000) {
     recommendation = `Adding 10 workers reduces completion time from ${(Math.round(completionHours * 10) / 10)}h to ~${(Math.round(completionHours * 0.75 * 10) / 10)}h and cuts late orders by ~65%.`;
-  } else if (strategy === 'FIFO') {
-    recommendation = `Switching to Hybrid / Deadline scheduling cuts late orders by ~70% with current ${W} workers.`;
+  } else if (normalizedStrategy === 'FIFO') {
+    recommendation = `Switching from FIFO to Hybrid / Deadline scheduling cuts late orders by ~70% with current ${W} workers.`;
   } else {
     recommendation = `Configuration is operating at optimal operational efficiency (${slaPct}% SLA adherence).`;
   }
 
-  const result = {
+  return {
     totalOrders: N,
     workerCount: W,
     activeHubCount: H,
-    strategy,
+    strategy: normalizedStrategy,
     estimatedCompletionHours: Math.round(completionHours * 10) / 10,
     lateOrdersCount: calculatedLateOrders,
     slaAdherencePct: slaPct,
@@ -925,12 +1037,44 @@ const handleSimulation = (req, res) => {
     recommendation,
     hubStats: hubBreakdown
   };
+}
 
+const handleSimulation = (req, res) => {
+  const result = executeSimulationCalculation(req.body);
   res.json(result);
+};
+
+const handleSimulationCompare = (req, res) => {
+  const {
+    orderCount = 50000,
+    workerCount = 30,
+    activeHubs = ['DEL-01', 'BOM-04', 'HYD-02', 'CCU-03']
+  } = req.body;
+
+  const strategies = ['FIFO', 'Priority', 'Deadline', 'Hybrid'];
+  const comparison = strategies.map(strat => {
+    return executeSimulationCalculation({
+      orderCount,
+      workerCount,
+      activeHubs,
+      strategy: strat
+    });
+  });
+
+  res.json({
+    orderCount: parseInt(orderCount),
+    workerCount: parseInt(workerCount),
+    activeHubs,
+    bestStrategy: 'Hybrid',
+    summary: 'Hybrid scheduling achieves the lowest late orders (30% vs FIFO) and highest SLA adherence under concurrency.',
+    comparison
+  });
 };
 
 app.post('/api/simulation', handleSimulation);
 app.post('/api/simulate', handleSimulation);
+app.post('/api/simulation/compare', handleSimulationCompare);
+app.post('/api/simulate/compare', handleSimulationCompare);
 
 // 17. GET /api/analytics (PRD Section 10)
 app.get('/api/analytics', (req, res) => {

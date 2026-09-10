@@ -3,7 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
-#include <mutex>
+#include "Compat.hpp"
 #include "Task.hpp"
 
 class Worker {
@@ -68,7 +68,8 @@ public:
         std::lock_guard<std::mutex> lock(workerMutex);
         std::shared_ptr<Worker> bestWorker = nullptr;
 
-        for (const auto& [id, worker] : workerRoster) {
+        for (const auto& pair : workerRoster) {
+            const auto& worker = pair.second;
             if (worker->isAvailable() && (worker->getDepartment() == department || worker->getDepartment() == "PICKING")) {
                 if (!bestWorker || worker->getEfficiency() > bestWorker->getEfficiency()) {
                     bestWorker = worker;
@@ -81,8 +82,8 @@ public:
     std::vector<std::shared_ptr<Worker>> getAllWorkers() const {
         std::lock_guard<std::mutex> lock(workerMutex);
         std::vector<std::shared_ptr<Worker>> list;
-        for (const auto& [id, w] : workerRoster) {
-            list.push_back(w);
+        for (const auto& pair : workerRoster) {
+            list.push_back(pair.second);
         }
         return list;
     }

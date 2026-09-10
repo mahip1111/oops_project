@@ -24,15 +24,13 @@ export default function AdminSidebar({
   kolkataAlert = true,
   activeStrategy = 'Hybrid'
 }) {
-  // PRD Section 2: Exact 12 Navigation Tabs
+  // PRD Section 2: Clean, Unified Navigation Items (Monochromatic Elegance)
   const navItems = [
     {
       id: 'overview',
       label: 'Overview',
       icon: LayoutDashboard,
-      badge: 'Live',
-      badgeColor: '#38BDF8',
-      badgeBg: 'rgba(56, 189, 248, 0.15)'
+      badge: 'Live'
     },
     {
       id: 'orders',
@@ -44,9 +42,7 @@ export default function AdminSidebar({
       id: 'fulfillment',
       label: 'Fulfillment',
       icon: Boxes,
-      badge: '8 Stages',
-      badgeColor: '#818CF8',
-      badgeBg: 'rgba(129, 140, 248, 0.15)'
+      badge: '8 Stages'
     },
     {
       id: 'tasks',
@@ -71,49 +67,37 @@ export default function AdminSidebar({
       id: 'inventory',
       label: 'Inventory',
       icon: Database,
-      badge: 'Stock',
-      badgeColor: '#34D399',
-      badgeBg: 'rgba(52, 211, 153, 0.15)'
+      badge: 'Stock'
     },
     {
       id: 'scheduling',
       label: 'Scheduling',
       icon: CalendarClock,
-      badge: activeStrategy,
-      badgeColor: '#FBBF24',
-      badgeBg: 'rgba(251, 191, 36, 0.15)'
+      badge: activeStrategy
     },
     {
       id: 'simulation',
       label: 'Simulation',
       icon: Sliders,
-      badge: '50K',
-      badgeColor: '#F472B6',
-      badgeBg: 'rgba(244, 114, 182, 0.15)'
+      badge: '50K'
     },
     {
       id: 'analytics',
       label: 'Analytics',
       icon: TrendingUp,
-      badge: '96.8%',
-      badgeColor: '#4ADE80',
-      badgeBg: 'rgba(74, 222, 128, 0.15)'
+      badge: '96.8%'
     },
     {
       id: 'events',
       label: 'System Events',
       icon: Activity,
-      badge: 'Stream',
-      badgeColor: '#94A3B8',
-      badgeBg: 'rgba(148, 163, 184, 0.15)'
+      badge: 'Stream'
     },
     {
       id: 'settings',
       label: 'Settings',
       icon: Settings,
-      badge: 'RBAC',
-      badgeColor: '#C084FC',
-      badgeBg: 'rgba(192, 132, 252, 0.15)'
+      badge: 'RBAC'
     }
   ];
 
@@ -128,8 +112,7 @@ export default function AdminSidebar({
         flexShrink: 0,
         userSelect: 'none',
         height: '100vh',
-        position: 'sticky',
-        top: 0,
+        overflow: 'hidden',
         zIndex: 60
       }}
     >
@@ -142,7 +125,8 @@ export default function AdminSidebar({
           alignItems: 'center',
           justifyContent: 'space-between',
           borderBottom: '1px solid #1E293B',
-          background: 'linear-gradient(180deg, #1E293B 0%, #0F172A 100%)'
+          background: '#0F172A',
+          flexShrink: 0
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -151,11 +135,11 @@ export default function AdminSidebar({
               width: '32px',
               height: '32px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+              background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 0 14px rgba(59, 130, 246, 0.45)'
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.35)'
             }}
           >
             <Cpu size={18} color="#FFFFFF" />
@@ -165,7 +149,7 @@ export default function AdminSidebar({
               QuickFlow
             </div>
             <div style={{ fontSize: '10px', color: '#64748B', fontWeight: 700, letterSpacing: '0.5px' }}>
-              ADMIN CONSOLE
+              OPERATIONS CONSOLE
             </div>
           </div>
         </div>
@@ -174,8 +158,8 @@ export default function AdminSidebar({
             display: 'flex',
             alignItems: 'center',
             gap: '5px',
-            backgroundColor: 'rgba(16, 185, 129, 0.15)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
+            backgroundColor: 'rgba(16, 185, 129, 0.12)',
+            border: '1px solid rgba(16, 185, 129, 0.25)',
             borderRadius: '12px',
             padding: '2px 8px'
           }}
@@ -201,21 +185,21 @@ export default function AdminSidebar({
           padding: '12px 8px',
           display: 'flex',
           flexDirection: 'column',
-          gap: '3px',
+          gap: '2px',
           overflowY: 'auto'
         }}
       >
         <div
           style={{
-            fontSize: '9.5px',
-            fontWeight: 800,
+            fontSize: '10px',
+            fontWeight: 700,
             letterSpacing: '0.8px',
             color: '#475569',
-            padding: '4px 10px 6px',
+            padding: '6px 10px 4px',
             textTransform: 'uppercase'
           }}
         >
-          Operations Surface
+          Operations Management
         </div>
 
         {navItems.map((item) => {
@@ -231,18 +215,18 @@ export default function AdminSidebar({
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '8px 10px',
-                borderRadius: '8px',
+                borderRadius: '6px',
                 border: 'none',
                 cursor: 'pointer',
-                backgroundColor: isActive ? 'rgba(59, 130, 246, 0.18)' : 'transparent',
-                borderLeft: isActive ? '3px solid #3B82F6' : '3px solid transparent',
+                backgroundColor: isActive ? 'rgba(37, 99, 235, 0.15)' : 'transparent',
+                borderLeft: isActive ? '3px solid #2563EB' : '3px solid transparent',
                 color: isActive ? '#60A5FA' : '#94A3B8',
                 transition: 'all 0.12s ease',
                 textAlign: 'left'
               }}
               onMouseEnter={(e) => {
                 if (!isActive) {
-                  e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)';
+                  e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)';
                   e.currentTarget.style.color = '#F1F5F9';
                 }
               }}
@@ -278,7 +262,7 @@ export default function AdminSidebar({
                       height: '7px',
                       borderRadius: '50%',
                       backgroundColor: '#EF4444',
-                      boxShadow: '0 0 8px #EF4444',
+                      boxShadow: '0 0 6px #EF4444',
                       display: 'inline-block'
                     }}
                     title="Kolkata hub capacity alert (>90%)"
@@ -290,9 +274,9 @@ export default function AdminSidebar({
                       fontSize: '10.5px',
                       fontWeight: 600,
                       color: isActive ? '#93C5FD' : '#64748B',
-                      backgroundColor: isActive ? 'rgba(59, 130, 246, 0.25)' : 'rgba(255,255,255,0.06)',
+                      backgroundColor: isActive ? 'rgba(37, 99, 235, 0.25)' : 'rgba(255,255,255,0.06)',
                       padding: '1px 6px',
-                      borderRadius: '10px'
+                      borderRadius: '6px'
                     }}
                   >
                     {item.count}
@@ -301,12 +285,12 @@ export default function AdminSidebar({
                 {item.badge && !item.count && (
                   <span
                     style={{
-                      fontSize: '9.5px',
-                      fontWeight: 700,
-                      color: item.badgeColor || '#93C5FD',
-                      backgroundColor: item.badgeBg || 'rgba(255,255,255,0.06)',
-                      padding: '2px 6px',
-                      borderRadius: '6px'
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      color: isActive ? '#93C5FD' : '#64748B',
+                      backgroundColor: isActive ? 'rgba(37, 99, 235, 0.2)' : 'rgba(255,255,255,0.05)',
+                      padding: '1px 6px',
+                      borderRadius: '4px'
                     }}
                   >
                     {item.badge}
@@ -323,7 +307,7 @@ export default function AdminSidebar({
         style={{
           padding: '12px',
           borderTop: '1px solid #1E293B',
-          background: '#0B1120'
+          background: '#070B14'
         }}
       >
         <button
@@ -334,9 +318,9 @@ export default function AdminSidebar({
             alignItems: 'center',
             justifyContent: 'space-between',
             padding: '8px 10px',
-            borderRadius: '8px',
-            border: reviewQueueCount > 0 ? '1px solid rgba(239, 68, 68, 0.5)' : '1px solid #1E293B',
-            backgroundColor: reviewQueueCount > 0 ? 'rgba(239, 68, 68, 0.15)' : 'rgba(255,255,255,0.02)',
+            borderRadius: '6px',
+            border: reviewQueueCount > 0 ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid #1E293B',
+            backgroundColor: reviewQueueCount > 0 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255,255,255,0.02)',
             color: reviewQueueCount > 0 ? '#FCA5A5' : '#94A3B8',
             cursor: 'pointer',
             transition: 'all 0.15s ease'
@@ -352,8 +336,8 @@ export default function AdminSidebar({
               fontWeight: 800,
               backgroundColor: reviewQueueCount > 0 ? '#EF4444' : '#334155',
               color: '#FFFFFF',
-              padding: '2px 7px',
-              borderRadius: '8px'
+              padding: '1px 6px',
+              borderRadius: '4px'
             }}
           >
             {reviewQueueCount}

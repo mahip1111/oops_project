@@ -3,7 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
-#include <mutex>
+#include "Compat.hpp"
 #include "Warehouse.hpp"
 
 // Inventory Manager Domain (PRD Section 4)
@@ -56,8 +56,8 @@ public:
     std::vector<std::shared_ptr<Warehouse>> getAllWarehouses() const {
         std::lock_guard<std::mutex> lock(managerMutex);
         std::vector<std::shared_ptr<Warehouse>> list;
-        for (const auto& [id, wh] : warehouses) {
-            list.push_back(wh);
+        for (const auto& pair : warehouses) {
+            list.push_back(pair.second);
         }
         return list;
     }
@@ -72,7 +72,9 @@ public:
         bestResult.totalCostScore = 999999.0;
         bestResult.isEligible = false;
 
-        for (const auto& [id, wh] : warehouses) {
+        for (const auto& pair : warehouses) {
+            const std::string& id = pair.first;
+            const auto& wh = pair.second;
             double dist = distanceMap.find(id) != distanceMap.end() ? distanceMap.at(id) : 1200.0;
             auto eval = wh->evaluateFulfillmentCost(items, dist);
 

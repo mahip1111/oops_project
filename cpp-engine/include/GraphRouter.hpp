@@ -67,7 +67,9 @@ public:
             pq.push({0.0, hub});
 
             while (!pq.empty()) {
-                auto [currDist, u] = pq.top();
+                auto topPair = pq.top();
+                double currDist = topPair.first;
+                std::string u = topPair.second;
                 pq.pop();
 
                 if (currDist > minLatency[u]) continue;
@@ -78,7 +80,7 @@ public:
                     if (minLatency.find(edge.toNode) == minLatency.end() || alt < minLatency[edge.toNode]) {
                         minLatency[edge.toNode] = alt;
                         previous[edge.toNode] = u;
-                        pq.push({alt, edge.toNode});
+                        pq.push(std::make_pair(alt, edge.toNode));
                     }
                 }
             }

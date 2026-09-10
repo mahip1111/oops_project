@@ -70,7 +70,7 @@ export default function AdminNavbar({
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-muted)' }}>
           <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>QuickFlow</span>
           <ChevronRight size={12} color="var(--text-muted)" />
-          <span style={{ color: 'var(--text-muted)' }}>Command Center</span>
+          <span style={{ color: 'var(--text-muted)' }}>Operations</span>
           <ChevronRight size={12} color="var(--text-muted)" />
         </div>
         <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>

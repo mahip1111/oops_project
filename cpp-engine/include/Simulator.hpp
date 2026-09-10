@@ -6,14 +6,20 @@
 #include <sstream>
 #include <algorithm>
 
+/**
+ * @brief Configuration parameters for What-If fulfillment workload simulations.
+ */
 struct SimulationConfig {
-    int orderCount;         // e.g., 50000
-    int workerCount;        // e.g., 30 or 40
-    std::vector<std::string> activeHubs; // e.g. {"DEL-01", "BOM-04", "HYD-02", "CCU-03"}
-    std::string strategy;   // "FIFO", "Priority", "Deadline", "Hybrid"
-    double expressOrderPct; // e.g., 25%
+    int orderCount;                     ///< Total simulated batch orders (e.g. 50,000)
+    int workerCount;                    ///< Active worker & AGV fleet size (e.g. 30 or 40)
+    std::vector<std::string> activeHubs; ///< Registered distribution hubs {"DEL-01", "BOM-04", "HYD-02", "CCU-03"}
+    std::string strategy;               ///< Scheduling strategy ("FIFO", "Priority", "Deadline", "Hybrid")
+    double expressOrderPct;             ///< Percentage of high-urgency express orders (default 25%)
 };
 
+/**
+ * @brief Telemetry metrics for a specific regional distribution hub under simulated load.
+ */
 struct HubSimulationStats {
     std::string hubId;
     std::string hubName;
@@ -22,6 +28,9 @@ struct HubSimulationStats {
     double avgLatencyMs;
 };
 
+/**
+ * @brief Comprehensive results produced by the What-If simulation engine.
+ */
 struct SimulationResult {
     int totalOrders;
     int workerCount;
@@ -38,8 +47,15 @@ struct SimulationResult {
     std::vector<HubSimulationStats> hubStats;
 };
 
+/**
+ * @class Simulator
+ * @brief High-performance analytical simulation engine for capacity forecasting and algorithm benchmarking.
+ */
 class Simulator {
 public:
+    /**
+     * @brief Executes a simulation run for a single configuration.
+     */
     static SimulationResult run(const SimulationConfig& config) {
         int N = std::max(1, config.orderCount);
         int W = std::max(1, config.workerCount);
@@ -48,17 +64,18 @@ public:
         double baseTaskSecondsPerOrder = 44.0;
         double strategyEfficiencyFactor = 1.0;
         double slaProtectionFactor = 1.0;
-        std::string stratName = config.strategy.empty() ? "Hybrid" : config.strategy;
+        std::string rawStrat = config.strategy.empty() ? "Hybrid" : config.strategy;
+        std::string stratName = rawStrat;
 
-        if (stratName == "Hybrid" || stratName == "PRIORITY_EDF") {
+        if (rawStrat == "Hybrid" || rawStrat == "PRIORITY_EDF") {
             strategyEfficiencyFactor = 0.93;
             slaProtectionFactor = 0.30;
             stratName = "Hybrid (Dynamic Priority + Deadline Signals)";
-        } else if (stratName == "Priority") {
+        } else if (rawStrat == "Priority") {
             strategyEfficiencyFactor = 0.95;
             slaProtectionFactor = 0.40;
             stratName = "Priority-First (Urgent)";
-        } else if (stratName == "Deadline") {
+        } else if (rawStrat == "Deadline") {
             strategyEfficiencyFactor = 0.94;
             slaProtectionFactor = 0.35;
             stratName = "Deadline (Earliest Deadline First)";
@@ -113,7 +130,7 @@ public:
         if (W < 35 && N >= 40000) {
             ss << "Adding 10 workers reduces completion time from " << std::fixed << std::setprecision(1) << completionHours 
                << "h to ~" << (completionHours * 0.75) << "h and cuts late orders by ~65%.";
-        } else if (config.strategy == "FIFO") {
+        } else if (rawStrat == "FIFO") {
             ss << "Switching to Hybrid / Deadline scheduling cuts late orders by ~70% with current " << W << " workers.";
         } else {
             ss << "Configuration is operating at optimal efficiency (" << std::fixed << std::setprecision(1) << slaPct << "% SLA adherence).";
@@ -134,5 +151,18 @@ public:
             ss.str(),
             hubs
         };
+    }
+
+    /**
+     * @brief Benchmarks all 4 scheduling algorithms (FIFO vs Priority vs Deadline vs Hybrid) under identical conditions.
+     */
+    static std::vector<SimulationResult> runComparison(int orderCount, int workerCount, const std::vector<std::string>& activeHubs) {
+        std::vector<std::string> strategies = {"FIFO", "Priority", "Deadline", "Hybrid"};
+        std::vector<SimulationResult> results;
+        for (const auto& strat : strategies) {
+            SimulationConfig cfg{orderCount, workerCount, activeHubs, strat, 25.0};
+            results.push_back(run(cfg));
+        }
+        return results;
     }
 };

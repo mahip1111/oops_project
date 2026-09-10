@@ -140,6 +140,42 @@ export default function App() {
     };
   }, []);
 
+  // Action: Transition Order State (PRD Section 4 & 7: State Machine Protection)
+  const handleTransitionOrderState = async (orderId, targetState, reason) => {
+    try {
+      const res = await fetch(`http://localhost:5000/api/orders/${orderId}/transition`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetState, reason })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showToast({
+          title: 'State Transition Rejected 🛡️',
+          message: data.message || `Invalid state transition to ${targetState}. State machine protection active.`,
+          type: 'danger'
+        });
+        return false;
+      }
+      showToast({
+        title: 'State Advanced ✓',
+        message: `Order #${orderId} transitioned to ${targetState}`,
+        type: 'success'
+      });
+      setOrders((prev) =>
+        prev.map((o) => (o.id === orderId ? { ...o, ...data.order } : o))
+      );
+      return true;
+    } catch (e) {
+      showToast({
+        title: 'Connection Error',
+        message: 'Could not connect to backend state machine endpoint',
+        type: 'danger'
+      });
+      return false;
+    }
+  };
+
   // Action: Retry Failed Order
   const handleRetryFailedOrder = async (orderId) => {
     await AdminApiService.retryFailedOrder(orderId);
@@ -305,8 +341,8 @@ export default function App() {
   const pendingReviewCount = reviewItems.filter((i) => i.status === 'PENDING_REVIEW').length;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--bg-primary)' }}>
-      {/* Left Operations Sidebar (PRD Section 2: 12 Tabs) */}
+    <div style={{ height: '100vh', display: 'flex', overflow: 'hidden', background: 'var(--bg-primary)' }}>
+      {/* Left Operations Sidebar (Fixed 100vh height, independent internal navigation scroll) */}
       <AdminSidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -316,8 +352,8 @@ export default function App() {
         kolkataAlert={metrics.warehouses?.some((w) => (w.city === 'Kolkata' || w.name?.includes('Kolkata')) && (w.capacityPercentage >= 90 || w.utilization >= 90))}
       />
 
-      {/* Right Column: Navbar + Main View Area */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, minHeight: '100vh' }}>
+      {/* Right Column: Navbar + Main View Area (Independently scrolling, 100vh full height) */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, height: '100vh', overflowY: 'auto', overflowX: 'hidden' }}>
         {/* Top Admin Navbar */}
         <AdminNavbar
           activeTab={activeTab}
@@ -332,8 +368,8 @@ export default function App() {
           setIsDarkMode={setIsDarkMode}
         />
 
-        {/* Center Content View Area (PRD Section 2 exact tabs) */}
-        <main style={{ flex: 1, padding: '16px 20px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+        {/* Center Content View Area */}
+        <main style={{ flex: 1, padding: '20px 24px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
           {activeTab === 'overview' && (
             <OverviewSection
               metrics={metrics}
@@ -353,6 +389,7 @@ export default function App() {
               orders={orders}
               onRetryFailedOrder={handleRetryFailedOrder}
               onOpenDispatchModal={() => setIsDispatchModalOpen(true)}
+              onTransitionOrderState={handleTransitionOrderState}
             />
           )}
 
