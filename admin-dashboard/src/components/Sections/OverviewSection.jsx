@@ -250,9 +250,9 @@ export default function OverviewSection({
             <span style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
               ACTIVE ORDERS
             </span>
-            <Clock size={16} color="var(--info)" />
+            <Clock size={16} color="var(--primary)" />
           </div>
-          <div className="tabular-nums" style={{ fontSize: '30px', fontWeight: 800, color: 'var(--info)', lineHeight: 1.1 }}>
+          <div className="tabular-nums" style={{ fontSize: '30px', fontWeight: 800, color: 'var(--primary)', lineHeight: 1.1 }}>
             {metrics?.orders?.processing ? metrics.orders.processing.toLocaleString() : '3,218'}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px' }}>
@@ -263,7 +263,7 @@ export default function OverviewSection({
               <span style={{ color: 'var(--text-muted)' }}>processing</span>
             </div>
             <svg width="48" height="16" style={{ opacity: 0.7 }}>
-              <path d="M 0,12 Q 16,14 28,4 T 48,2" fill="none" stroke="var(--info)" strokeWidth="2" />
+              <path d="M 0,12 Q 16,14 28,4 T 48,2" fill="none" stroke="var(--primary)" strokeWidth="2" />
             </svg>
           </div>
         </div>
@@ -409,7 +409,7 @@ export default function OverviewSection({
                   <>
                     <path d={areaPath} fill="url(#orderGrad)" />
                     <path d={linePath} fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" />
-                    <path d={fulfilledLine} fill="none" stroke="#10B981" strokeWidth="1.8" strokeDasharray="3 3" />
+                    <path d={fulfilledLine} fill="none" stroke="var(--success)" strokeWidth="1.8" strokeDasharray="3 3" />
                     {activePoints.map((p, idx) => {
                       const x = (idx / (activePoints.length - 1)) * 500;
                       const y = 130 - (p.orders / maxVal) * 110;
@@ -578,10 +578,10 @@ export default function OverviewSection({
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span className="pulse-dot" style={{ backgroundColor: 'var(--info)', width: '6px', height: '6px' }}></span>
+                  <span className="pulse-dot" style={{ backgroundColor: 'var(--primary)', width: '6px', height: '6px' }}></span>
                   <span style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: 500 }}>Robots processing</span>
                 </div>
-                <span className="tabular-nums" style={{ fontSize: '14px', fontWeight: 700, color: 'var(--info)' }}>
+                <span className="tabular-nums" style={{ fontSize: '14px', fontWeight: 700, color: 'var(--primary)' }}>
                   {metrics?.tasks?.processing ?? 177}
                 </span>
               </div>

@@ -19,19 +19,19 @@ export default function ToastAlerts({ toasts, onDismiss }) {
       }}
     >
       {toasts.map((toast) => {
-        let border = 'var(--border-subtle)';
+        let border = 'var(--border)';
         let Icon = Info;
-        let iconColor = 'var(--accent-blue)';
+        let iconColor = 'var(--primary)';
 
         if (toast.type === 'success') {
           Icon = CheckCircle2;
-          iconColor = '#059669';
-        } else if (toast.type === 'warn') {
+          iconColor = 'var(--success)';
+        } else if (toast.type === 'warn' || toast.type === 'warning') {
           Icon = AlertTriangle;
-          iconColor = '#d97706';
-        } else if (toast.type === 'error') {
+          iconColor = 'var(--warning)';
+        } else if (toast.type === 'error' || toast.type === 'danger') {
           Icon = XCircle;
-          iconColor = '#dc2626';
+          iconColor = 'var(--danger)';
         }
 
         return (

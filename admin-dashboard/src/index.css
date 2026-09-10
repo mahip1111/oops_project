@@ -4,35 +4,35 @@
 
 :root {
   /* ────────── 1. DESIGN SYSTEM COLOR PALETTE ────────── */
-  /* Primary Action (Blue) */
+  /* Primary Action / Active States / Processing (Blue) */
   --primary: #2563EB;
   --primary-hover: #1D4ED8;
   --primary-subtle: rgba(37, 99, 235, 0.08);
   --primary-border: rgba(37, 99, 235, 0.22);
 
-  /* Success / Healthy / Optimal (Green) */
+  /* Success / Healthy / Operational / Completed (Green) */
   --success: #16A34A;
   --success-hover: #15803D;
   --success-subtle: rgba(22, 163, 74, 0.08);
   --success-border: rgba(22, 163, 74, 0.22);
 
-  /* Warning / Heavy / Pending (Amber/Orange) */
+  /* Warning / Pending / Attention Required (Orange) */
   --warning: #D97706;
   --warning-hover: #B45309;
   --warning-subtle: rgba(217, 119, 6, 0.08);
   --warning-border: rgba(217, 119, 6, 0.22);
 
-  /* Critical / Error / Delayed (Red) */
+  /* Critical / Error / Urgent Action (Red) */
   --danger: #DC2626;
   --danger-hover: #B91C1C;
   --danger-subtle: rgba(220, 38, 38, 0.08);
   --danger-border: rgba(220, 38, 38, 0.22);
 
-  /* Informational (Cyan / Light Blue) */
-  --info: #0284C7;
-  --info-hover: #0369A1;
-  --info-subtle: rgba(2, 132, 199, 0.08);
-  --info-border: rgba(2, 132, 199, 0.22);
+  /* Informational (Mapped to primary blue family for consistency) */
+  --info: #2563EB;
+  --info-hover: #1D4ED8;
+  --info-subtle: rgba(37, 99, 235, 0.08);
+  --info-border: rgba(37, 99, 235, 0.22);
 
   --purple: #7C3AED;
   --purple-hover: #6D28D9;
@@ -55,8 +55,9 @@
   --sidebar: #0F172A;
   --sidebar-hover: #1E293B;
   --sidebar-text: #94A3B8;
-  --sidebar-active-bg: rgba(37, 99, 235, 0.15);
-  --sidebar-active-text: #60A5FA;
+  --sidebar-active-bg: #172554;
+  --sidebar-active-text: #F8FAFC;
+  --sidebar-border: #1E293B;
 
   /* Typography Hierarchy */
   --text-primary: #0F172A;        /* Headings & primary text */
@@ -64,7 +65,7 @@
   --text-heading: #0F172A;
   --text-color: #0F172A;
 
-  --text-secondary: #475569;      /* Subtitles & table metadata */
+  --text-secondary: #64748B;      /* Subtitles & table metadata */
   --text-muted: #64748B;          /* Supporting captions */
   --text-dim: #94A3B8;            /* Inactive / subtle labels */
   --text-faint: #CBD5E1;          /* Disabled states */
@@ -84,8 +85,8 @@
   --accent-emerald: #16A34A;
   --accent-amber: #D97706;
   --accent-rose: #DC2626;
-  --accent-cyan: #0284C7;
-  --accent-indigo: #4F46E5;
+  --accent-cyan: #2563EB;
+  --accent-indigo: #2563EB;
 
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-display: 'Outfit', 'Inter', sans-serif;

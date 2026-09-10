@@ -139,7 +139,7 @@ export default function AdminSidebar({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.35)'
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)'
             }}
           >
             <Cpu size={18} color="#FFFFFF" />
@@ -158,8 +158,8 @@ export default function AdminSidebar({
             display: 'flex',
             alignItems: 'center',
             gap: '5px',
-            backgroundColor: 'rgba(16, 185, 129, 0.12)',
-            border: '1px solid rgba(16, 185, 129, 0.25)',
+            backgroundColor: 'rgba(22, 163, 74, 0.12)',
+            border: '1px solid rgba(22, 163, 74, 0.22)',
             borderRadius: '12px',
             padding: '2px 8px'
           }}
@@ -169,12 +169,12 @@ export default function AdminSidebar({
               width: '6px',
               height: '6px',
               borderRadius: '50%',
-              backgroundColor: '#10B981',
-              boxShadow: '0 0 6px #10B981',
+              backgroundColor: '#16A34A',
+              boxShadow: '0 0 4px rgba(22, 163, 74, 0.5)',
               display: 'inline-block'
             }}
           />
-          <span style={{ fontSize: '10px', fontWeight: 700, color: '#34D399' }}>Live</span>
+          <span style={{ fontSize: '10px', fontWeight: 700, color: '#86EFAC' }}>Live</span>
         </div>
       </div>
 
@@ -194,7 +194,7 @@ export default function AdminSidebar({
             fontSize: '10px',
             fontWeight: 700,
             letterSpacing: '0.8px',
-            color: '#475569',
+            color: '#64748B',
             padding: '6px 10px 4px',
             textTransform: 'uppercase'
           }}
@@ -205,6 +205,7 @@ export default function AdminSidebar({
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
+          const isLiveBadge = item.badge === 'Live';
           return (
             <button
               key={item.id}
@@ -218,9 +219,9 @@ export default function AdminSidebar({
                 borderRadius: '6px',
                 border: 'none',
                 cursor: 'pointer',
-                backgroundColor: isActive ? 'rgba(37, 99, 235, 0.15)' : 'transparent',
+                backgroundColor: isActive ? '#172554' : 'transparent',
                 borderLeft: isActive ? '3px solid #2563EB' : '3px solid transparent',
-                color: isActive ? '#60A5FA' : '#94A3B8',
+                color: isActive ? '#F8FAFC' : '#94A3B8',
                 transition: 'all 0.12s ease',
                 textAlign: 'left'
               }}
@@ -242,7 +243,7 @@ export default function AdminSidebar({
                 <span
                   style={{
                     fontSize: '12.5px',
-                    fontWeight: isActive ? 700 : 500,
+                    fontWeight: isActive ? 600 : 500,
                     color: isActive ? '#F8FAFC' : '#94A3B8',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
@@ -258,11 +259,11 @@ export default function AdminSidebar({
                 {item.alert && (
                   <span
                     style={{
-                      width: '7px',
-                      height: '7px',
+                      width: '6px',
+                      height: '6px',
                       borderRadius: '50%',
-                      backgroundColor: '#EF4444',
-                      boxShadow: '0 0 6px #EF4444',
+                      backgroundColor: '#DC2626',
+                      boxShadow: '0 0 4px rgba(220, 38, 38, 0.4)',
                       display: 'inline-block'
                     }}
                     title="Kolkata hub capacity alert (>90%)"
@@ -273,10 +274,10 @@ export default function AdminSidebar({
                     style={{
                       fontSize: '10.5px',
                       fontWeight: 600,
-                      color: isActive ? '#93C5FD' : '#64748B',
-                      backgroundColor: isActive ? 'rgba(37, 99, 235, 0.25)' : 'rgba(255,255,255,0.06)',
+                      color: isActive ? '#93C5FD' : '#94A3B8',
+                      backgroundColor: isActive ? 'rgba(37, 99, 235, 0.18)' : 'rgba(148, 163, 184, 0.08)',
                       padding: '1px 6px',
-                      borderRadius: '6px'
+                      borderRadius: '4px'
                     }}
                   >
                     {item.count}
@@ -287,8 +288,16 @@ export default function AdminSidebar({
                     style={{
                       fontSize: '10px',
                       fontWeight: 600,
-                      color: isActive ? '#93C5FD' : '#64748B',
-                      backgroundColor: isActive ? 'rgba(37, 99, 235, 0.2)' : 'rgba(255,255,255,0.05)',
+                      color: isLiveBadge
+                        ? '#86EFAC'
+                        : isActive
+                        ? '#93C5FD'
+                        : '#94A3B8',
+                      backgroundColor: isLiveBadge
+                        ? 'rgba(22, 163, 74, 0.14)'
+                        : isActive
+                        ? 'rgba(37, 99, 235, 0.18)'
+                        : 'rgba(148, 163, 184, 0.08)',
                       padding: '1px 6px',
                       borderRadius: '4px'
                     }}
@@ -307,7 +316,7 @@ export default function AdminSidebar({
         style={{
           padding: '12px',
           borderTop: '1px solid #1E293B',
-          background: '#070B14'
+          background: '#0F172A'
         }}
       >
         <button
@@ -319,23 +328,26 @@ export default function AdminSidebar({
             justifyContent: 'space-between',
             padding: '8px 10px',
             borderRadius: '6px',
-            border: reviewQueueCount > 0 ? '1px solid rgba(239, 68, 68, 0.35)' : '1px solid #1E293B',
-            backgroundColor: reviewQueueCount > 0 ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255,255,255,0.02)',
+            border: reviewQueueCount > 0 ? '1px solid rgba(220, 38, 38, 0.22)' : '1px solid #1E293B',
+            backgroundColor: reviewQueueCount > 0 ? 'rgba(220, 38, 38, 0.08)' : 'rgba(255,255,255,0.02)',
             color: reviewQueueCount > 0 ? '#FCA5A5' : '#94A3B8',
             cursor: 'pointer',
             transition: 'all 0.15s ease'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <ShieldAlert size={15} color={reviewQueueCount > 0 ? '#EF4444' : '#64748B'} />
-            <span style={{ fontSize: '12px', fontWeight: 600 }}>Review Queue</span>
+            <ShieldAlert size={15} color={reviewQueueCount > 0 ? '#DC2626' : '#64748B'} />
+            <span style={{ fontSize: '12px', fontWeight: 600, color: reviewQueueCount > 0 ? '#FCA5A5' : '#94A3B8' }}>
+              Review Queue
+            </span>
           </div>
           <span
             style={{
               fontSize: '10.5px',
-              fontWeight: 800,
-              backgroundColor: reviewQueueCount > 0 ? '#EF4444' : '#334155',
-              color: '#FFFFFF',
+              fontWeight: 700,
+              backgroundColor: reviewQueueCount > 0 ? 'rgba(220, 38, 38, 0.22)' : 'rgba(148, 163, 184, 0.08)',
+              color: reviewQueueCount > 0 ? '#FCA5A5' : '#94A3B8',
+              border: reviewQueueCount > 0 ? '1px solid rgba(220, 38, 38, 0.3)' : '1px solid transparent',
               padding: '1px 6px',
               borderRadius: '4px'
             }}
