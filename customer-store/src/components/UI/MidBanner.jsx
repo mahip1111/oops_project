@@ -4,18 +4,18 @@ import { playAppleSound } from '../../utils/audio';
 
 export default function MidBanner({ onShopClick, onTradeInClick }) {
   return (
-    <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px 48px' }}>
+    <section className="store-container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 40px' }}>
       <div
         style={{
           background: 'linear-gradient(135deg, #0b0f19 0%, #1e293b 100%)',
           borderRadius: '24px',
-          padding: '48px 40px',
+          padding: 'clamp(24px, 5vw, 44px) clamp(18px, 4vw, 36px)',
           color: '#ffffff',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '32px',
+          gap: '24px',
           boxShadow: '0 20px 40px rgba(0,0,0,0.12)'
         }}
       >

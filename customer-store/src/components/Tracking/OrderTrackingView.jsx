@@ -281,7 +281,7 @@ export default function OrderTrackingView({ orders = INITIAL_CUSTOMER_ORDERS, on
   const driverRating = currentOrder?.driverRating || '4.9';
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '1120px', margin: '0 auto', padding: '32px 20px 80px' }}>
+    <div className="animate-fade-in store-container" style={{ maxWidth: '1120px', margin: '0 auto', padding: 'clamp(16px, 4vw, 32px) clamp(12px, 3vw, 20px) 60px' }}>
       
       {/* Search & Live Network Quick Bar */}
       <div
@@ -290,12 +290,12 @@ export default function OrderTrackingView({ orders = INITIAL_CUSTOMER_ORDERS, on
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '16px',
-          marginBottom: '24px',
+          gap: '14px',
+          marginBottom: '20px',
           background: '#ffffff',
           border: '1px solid var(--color-border)',
           borderRadius: '16px',
-          padding: '14px 20px',
+          padding: '12px 18px',
           boxShadow: 'var(--shadow-sm)'
         }}
       >
@@ -396,7 +396,7 @@ export default function OrderTrackingView({ orders = INITIAL_CUSTOMER_ORDERS, on
           background: '#ffffff',
           border: '1px solid var(--color-border)',
           borderRadius: '24px',
-          padding: '32px',
+          padding: 'clamp(16px, 4vw, 32px)',
           boxShadow: 'var(--shadow-card)',
           position: 'relative'
         }}

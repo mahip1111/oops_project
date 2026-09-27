@@ -51,13 +51,13 @@ export default function ReviewsCarousel() {
   const current = CUSTOMER_REVIEWS[currentIndex];
 
   return (
-    <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px 64px' }}>
+    <section className="store-container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 48px' }}>
       <div
         style={{
           background: '#ffffff',
           borderRadius: '24px',
           border: '1px solid var(--color-border)',
-          padding: '36px 40px',
+          padding: 'clamp(20px, 4vw, 36px) clamp(16px, 4vw, 36px)',
           boxShadow: 'var(--shadow-card)',
           position: 'relative'
         }}

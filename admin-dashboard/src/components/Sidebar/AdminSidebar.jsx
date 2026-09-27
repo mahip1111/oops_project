@@ -13,7 +13,8 @@ import {
   Activity,
   Settings,
   ShieldAlert,
-  Cpu
+  Cpu,
+  X
 } from 'lucide-react';
 
 export default function AdminSidebar({
@@ -22,7 +23,9 @@ export default function AdminSidebar({
   metrics,
   reviewQueueCount = 2,
   kolkataAlert = true,
-  activeStrategy = 'Hybrid'
+  activeStrategy = 'Hybrid',
+  isOpen = false,
+  onClose
 }) {
   // PRD Section 2: Clean, Unified Navigation Items (Monochromatic Elegance)
   const navItems = [
@@ -103,6 +106,7 @@ export default function AdminSidebar({
 
   return (
     <aside
+      className={`admin-sidebar ${isOpen ? 'sidebar-open' : ''}`}
       style={{
         width: '240px',
         backgroundColor: '#0F172A',
@@ -113,7 +117,7 @@ export default function AdminSidebar({
         userSelect: 'none',
         height: '100vh',
         overflow: 'hidden',
-        zIndex: 60
+        zIndex: 1000
       }}
     >
       {/* Brand Header */}
@@ -153,28 +157,53 @@ export default function AdminSidebar({
             </div>
           </div>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '5px',
-            backgroundColor: 'rgba(22, 163, 74, 0.12)',
-            border: '1px solid rgba(22, 163, 74, 0.22)',
-            borderRadius: '12px',
-            padding: '2px 8px'
-          }}
-        >
-          <span
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div
             style={{
-              width: '6px',
-              height: '6px',
-              borderRadius: '50%',
-              backgroundColor: '#16A34A',
-              boxShadow: '0 0 4px rgba(22, 163, 74, 0.5)',
-              display: 'inline-block'
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+              backgroundColor: 'rgba(22, 163, 74, 0.12)',
+              border: '1px solid rgba(22, 163, 74, 0.22)',
+              borderRadius: '12px',
+              padding: '2px 8px'
             }}
-          />
-          <span style={{ fontSize: '10px', fontWeight: 700, color: '#86EFAC' }}>Live</span>
+          >
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#16A34A',
+                boxShadow: '0 0 4px rgba(22, 163, 74, 0.5)',
+                display: 'inline-block'
+              }}
+            />
+            <span style={{ fontSize: '10px', fontWeight: 700, color: '#86EFAC' }}>Live</span>
+          </div>
+
+          {/* Close drawer button on mobile */}
+          {onClose && (
+            <button
+              onClick={onClose}
+              style={{
+                background: 'rgba(255,255,255,0.08)',
+                border: 'none',
+                borderRadius: '6px',
+                color: '#94A3B8',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              className="admin-sidebar-close"
+              title="Close Navigation"
+            >
+              <X size={18} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -209,7 +238,10 @@ export default function AdminSidebar({
           return (
             <button
               key={item.id}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => {
+                setActiveTab(item.id);
+                if (onClose) onClose();
+              }}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -320,7 +352,10 @@ export default function AdminSidebar({
         }}
       >
         <button
-          onClick={() => setActiveTab('reviewQueue')}
+          onClick={() => {
+            setActiveTab('reviewQueue');
+            if (onClose) onClose();
+          }}
           style={{
             width: '100%',
             display: 'flex',

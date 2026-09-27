@@ -73,10 +73,11 @@ export default function FlashDealsCarousel({ onAddToCart, onSelectProduct, produ
       }}
     >
       <div
+        className="store-container"
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '0 32px',
+          padding: '0 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -102,7 +103,7 @@ export default function FlashDealsCarousel({ onAddToCart, onSelectProduct, produ
             <Flame size={14} fill="#d97706" /> QuickFlow Express Flash Deals
           </span>
 
-          <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-carbon)' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-carbon)' }}>
             Today's Limited Fast-Track Deals
           </h2>
         </div>
@@ -130,14 +131,16 @@ export default function FlashDealsCarousel({ onAddToCart, onSelectProduct, produ
 
       {/* Snap Scroll Grid of Flash Deals */}
       <div
+        className="store-container"
         style={{
           display: 'flex',
-          gap: '18px',
+          gap: '16px',
           overflowX: 'auto',
-          padding: '8px 32px 16px',
+          padding: '8px 24px 16px',
           maxWidth: '1280px',
           margin: '0 auto',
-          scrollbarWidth: 'none'
+          scrollbarWidth: 'none',
+          WebkitOverflowScrolling: 'touch'
         }}
       >
         {FLASH_DEALS_INR.map((deal) => {
@@ -165,6 +168,8 @@ export default function FlashDealsCarousel({ onAddToCart, onSelectProduct, produ
                   <img
                     src={deal.image}
                     alt={deal.title}
+                    loading="lazy"
+                    decoding="async"
                     style={{
                       width: '100%',
                       height: '100%',

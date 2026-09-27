@@ -403,7 +403,12 @@ export default function App() {
       )}
 
       {/* Floating 24/7 AI Specialist Assistant */}
-      <SpecialistChatWidget />
+      <SpecialistChatWidget
+        onNavigateView={(view) => {
+          setCurrentView(view);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
 
       {/* Footer */}
       <QuickflowFooter

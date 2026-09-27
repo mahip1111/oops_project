@@ -23,10 +23,10 @@ export default function DeviceCompareModal({ isOpen, onClose, products = [] }) {
     <div
       className="drawer-overlay"
       onClick={() => { playAppleSound('click'); onClose(); }}
-      style={{ alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+      style={{ alignItems: 'center', justifyContent: 'center', padding: '16px' }}
     >
       <div
-        className="animate-fade-in"
+        className="animate-fade-in store-modal-content"
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
@@ -37,7 +37,7 @@ export default function DeviceCompareModal({ isOpen, onClose, products = [] }) {
           borderRadius: '24px',
           border: '1px solid var(--color-border)',
           boxShadow: 'var(--shadow-modal)',
-          padding: '32px'
+          padding: 'clamp(20px, 4vw, 32px)'
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>

@@ -99,7 +99,11 @@ export default function HeroBannerCarousel({ onSelectProduct, onAddToCart, produ
           key={slide.id}
           src={slide.image}
           alt={slide.title}
-          className="animate-fade-in"
+          fetchPriority={currentSlideIndex === 0 ? "high" : "low"}
+          decoding="async"
+          width="600"
+          height="400"
+          className="animate-fade-in hero-responsive-img"
           style={{
             height: '85%',
             maxHeight: '440px',
@@ -116,11 +120,12 @@ export default function HeroBannerCarousel({ onSelectProduct, onAddToCart, produ
 
       {/* Slide Text Content */}
       <div
+        className="store-container"
         style={{
           maxWidth: '1280px',
           width: '100%',
           margin: '0 auto',
-          padding: '56px 32px 24px',
+          padding: 'clamp(28px, 6vw, 56px) clamp(16px, 4vw, 32px) 24px',
           position: 'relative',
           zIndex: 2,
           flex: 1,

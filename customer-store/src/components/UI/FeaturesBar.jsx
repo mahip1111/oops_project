@@ -4,16 +4,16 @@ import { playAppleSound } from '../../utils/audio';
 
 export default function FeaturesBar({ onOpenTradeIn, onOpenSuperCoins }) {
   return (
-    <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 32px 36px' }}>
+    <section className="store-container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 28px' }}>
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '16px',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '14px',
           background: '#ffffff',
           borderRadius: '20px',
           border: '1px solid var(--color-border)',
-          padding: '20px 24px',
+          padding: '16px 20px',
           boxShadow: 'var(--shadow-card)'
         }}
       >

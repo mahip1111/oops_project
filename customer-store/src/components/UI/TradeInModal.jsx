@@ -41,19 +41,20 @@ export default function TradeInModal({ isOpen, onClose, onApplyCredit }) {
     <div
       className="drawer-overlay"
       onClick={() => { playAppleSound('click'); onClose(); }}
-      style={{ alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+      style={{ alignItems: 'center', justifyContent: 'center', padding: '16px' }}
     >
       <div
-        className="animate-fade-in"
+        className="animate-fade-in store-modal-content"
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
           maxWidth: '560px',
+          maxHeight: '90vh',
           background: '#ffffff',
           borderRadius: '24px',
           border: '1px solid var(--color-border)',
           boxShadow: 'var(--shadow-modal)',
-          overflow: 'hidden'
+          overflowY: 'auto'
         }}
       >
         {/* Header */}

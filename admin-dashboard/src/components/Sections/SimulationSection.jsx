@@ -299,7 +299,7 @@ export default function SimulationSection({ onOpenDispatchModal }) {
 
       {/* TAB 1: Single Strategy Modeling */}
       {activeTab === 'single' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
           
           {/* Left: Interactive Sliders & Parameter Configuration */}
           <div

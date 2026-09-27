@@ -56,42 +56,43 @@ export default function AccountView({
   };
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '960px', margin: '0 auto', padding: '40px 24px 80px' }}>
+    <div className="store-container animate-fade-in" style={{ padding: 'clamp(16px, 3vw, 40px) 16px 80px' }}>
       {/* Header Profile Info Card */}
       <div
         style={{
           background: '#ffffff',
           border: '1px solid var(--color-border)',
           borderRadius: '20px',
-          padding: '28px',
+          padding: 'clamp(16px, 3vw, 28px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: '20px',
-          marginBottom: '28px',
+          gap: '16px',
+          marginBottom: '24px',
           boxShadow: 'var(--shadow-card)'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           <div
             style={{
-              width: '60px',
-              height: '60px',
+              width: '54px',
+              height: '54px',
               borderRadius: '50%',
               background: 'linear-gradient(135deg, #1d1d1f 0%, #434344 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontWeight: 800,
-              fontSize: '22px',
-              color: '#ffffff'
+              fontSize: '20px',
+              color: '#ffffff',
+              flexShrink: 0
             }}
           >
             AS
           </div>
           <div>
-            <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--color-carbon)' }}>Aarav Sharma</h2>
+            <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--color-carbon)', margin: 0 }}>Aarav Sharma</h2>
             <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>aarav.sharma@quickflow.io • Member since 2024</span>
           </div>
         </div>
@@ -114,7 +115,7 @@ export default function AccountView({
       </div>
 
       {/* Tabs Navigation */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', overflowX: 'auto', paddingBottom: '4px' }}>
         {[
           { id: 'orders', label: `Orders (${orders.length})` },
           { id: 'addresses', label: `Saved Addresses (${addresses.length})` },
@@ -133,6 +134,7 @@ export default function AccountView({
               fontSize: '13px',
               fontWeight: 700,
               cursor: 'pointer',
+              whiteSpace: 'nowrap',
               background: activeTab === tab.id ? 'var(--color-carbon)' : '#ffffff',
               color: activeTab === tab.id ? '#ffffff' : 'var(--text-muted)',
               boxShadow: activeTab === tab.id ? '0 2px 4px rgba(0,0,0,0.1)' : 'none',

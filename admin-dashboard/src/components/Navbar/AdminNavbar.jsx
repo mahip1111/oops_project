@@ -4,7 +4,8 @@ import {
   Moon,
   Sun,
   Radio,
-  ChevronRight
+  ChevronRight,
+  Menu
 } from 'lucide-react';
 
 const TAB_TITLES = {
@@ -33,7 +34,8 @@ export default function AdminNavbar({
   onOpenDispatchModal,
   backendStatus,
   isDarkMode,
-  setIsDarkMode
+  setIsDarkMode,
+  onToggleSidebar
 }) {
   const [timeStr, setTimeStr] = useState('');
 
@@ -61,25 +63,54 @@ export default function AdminNavbar({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 20px',
-        boxShadow: 'var(--shadow-xs)'
+        padding: '0 16px',
+        boxShadow: 'var(--shadow-xs)',
+        gap: '10px'
       }}
     >
-      {/* Left: Breadcrumb & Active View Title */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-muted)' }}>
+      {/* Left: Mobile Toggle & Breadcrumb / Active View Title */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
+        {/* Mobile Hamburger Toggle */}
+        <button
+          onClick={onToggleSidebar}
+          className="btn-secondary"
+          style={{
+            padding: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}
+          title="Toggle Navigation Menu"
+          aria-label="Toggle navigation menu"
+        >
+          <Menu size={18} />
+        </button>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-muted)' }} className="hide-on-mobile">
           <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>QuickFlow</span>
           <ChevronRight size={12} color="var(--text-muted)" />
           <span style={{ color: 'var(--text-muted)' }}>Operations</span>
           <ChevronRight size={12} color="var(--text-muted)" />
         </div>
-        <div style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', letterSpacing: '-0.2px' }}>
+
+        <div
+          style={{
+            fontSize: '14.5px',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            letterSpacing: '-0.2px',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}
+        >
           {currentTitle}
         </div>
       </div>
 
       {/* Center: System Status */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }} className="hide-on-mobile">
         <div
           style={{
             display: 'flex',
@@ -104,7 +135,7 @@ export default function AdminNavbar({
       </div>
 
       {/* Right: Utility actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
         {/* Customer Storefront Link */}
         <a
           href="http://localhost:3000"
@@ -113,7 +144,7 @@ export default function AdminNavbar({
           className="btn-secondary"
           style={{
             fontSize: '12px',
-            padding: '5px 10px',
+            padding: '5px 9px',
             textDecoration: 'none',
             display: 'flex',
             alignItems: 'center',
@@ -122,7 +153,7 @@ export default function AdminNavbar({
           title="Open Customer Storefront (Port 3000)"
         >
           <Store size={13} color="var(--primary)" />
-          <span>Customer Store ↗</span>
+          <span className="hide-on-mobile">Customer Store ↗</span>
         </a>
 
         {/* Live Simulation Switch */}
@@ -131,30 +162,30 @@ export default function AdminNavbar({
           className="btn-secondary"
           style={{
             fontSize: '12px',
-            padding: '5px 10px',
+            padding: '5px 9px',
             color: isLiveSimulating ? 'var(--primary)' : 'var(--text-secondary)',
             borderColor: isLiveSimulating ? 'var(--primary)' : 'var(--border)'
           }}
           title="Toggle live telemetry feed"
         >
           <Radio size={12} />
-          <span>{isLiveSimulating ? 'Live' : 'Paused'}</span>
+          <span className="hide-on-mobile">{isLiveSimulating ? 'Live' : 'Paused'}</span>
         </button>
 
-          {/* Theme Toggle */}
-          {setIsDarkMode && (
-            <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="btn-secondary"
-              style={{
-                padding: '6px 8px',
-                color: 'var(--text-secondary)'
-              }}
-              title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-            >
-              {isDarkMode ? <Sun size={14} color="var(--warning)" /> : <Moon size={14} />}
-            </button>
-          )}
+        {/* Theme Toggle */}
+        {setIsDarkMode && (
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="btn-secondary"
+            style={{
+              padding: '6px 8px',
+              color: 'var(--text-secondary)'
+            }}
+            title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+          >
+            {isDarkMode ? <Sun size={14} color="var(--warning)" /> : <Moon size={14} />}
+          </button>
+        )}
       </div>
     </header>
   );

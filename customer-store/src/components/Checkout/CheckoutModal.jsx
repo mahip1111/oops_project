@@ -130,16 +130,16 @@ export default function CheckoutModal({
   };
 
   return (
-    <div className="drawer-overlay" onClick={() => { playAppleSound('click'); onClose(); }} style={{ alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+    <div className="drawer-overlay" onClick={() => { playAppleSound('click'); onClose(); }} style={{ alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
       <div
-        className="animate-fade-in"
+        className="animate-fade-in store-modal-content"
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
           maxWidth: '720px',
           maxHeight: '92vh',
           overflowY: 'auto',
-          padding: '36px',
+          padding: 'clamp(20px, 4vw, 36px)',
           background: '#ffffff',
           borderRadius: '24px',
           border: '1px solid var(--color-border)',
@@ -152,8 +152,8 @@ export default function CheckoutModal({
           onClick={() => { playAppleSound('click'); onClose(); }}
           style={{
             position: 'absolute',
-            top: '20px',
-            right: '20px',
+            top: '16px',
+            right: '16px',
             background: 'rgba(0, 0, 0, 0.05)',
             border: 'none',
             color: 'var(--color-carbon)',
@@ -182,13 +182,13 @@ export default function CheckoutModal({
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
           {/* Section 1: Delivery Address (Bhubaneswar) */}
-          <div style={{ background: '#fbfbfd', border: '1px solid var(--color-border)', borderRadius: '14px', padding: '20px' }}>
+          <div style={{ background: '#fbfbfd', border: '1px solid var(--color-border)', borderRadius: '14px', padding: '18px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
               <MapPin size={16} color="var(--color-apple-blue)" />
               <h2 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--color-carbon)' }}>Delivery Address</h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
               <div>
                 <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Full Name</label>
                 <input
@@ -211,7 +211,7 @@ export default function CheckoutModal({
                 />
               </div>
 
-              <div style={{ gridColumn: 'span 2' }}>
+              <div style={{ gridColumn: '1 / -1' }}>
                 <label style={{ fontSize: '12px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Street Address</label>
                 <input
                   type="text"

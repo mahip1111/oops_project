@@ -146,68 +146,70 @@ export default function FulfillmentSection({ orders = [], onOpenDispatchModal })
               </div>
 
               {/* Progress Stepper Bar */}
-              <div style={{ display: 'flex', alignItems: 'center', position: 'relative', margin: '8px 0' }}>
-                {stages.map((st, idx) => {
-                  const isCompleted = idx < currIdx;
-                  const isCurrent = idx === currIdx;
-                  return (
-                    <React.Fragment key={st.key}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          gap: '4px',
-                          zIndex: 2,
-                          flex: 1
-                        }}
-                      >
+              <div style={{ overflowX: 'auto', paddingBottom: '6px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', position: 'relative', margin: '8px 0', minWidth: '560px' }}>
+                  {stages.map((st, idx) => {
+                    const isCompleted = idx < currIdx;
+                    const isCurrent = idx === currIdx;
+                    return (
+                      <React.Fragment key={st.key}>
                         <div
                           style={{
-                            width: isCurrent ? '26px' : '20px',
-                            height: isCurrent ? '26px' : '20px',
-                            borderRadius: '50%',
-                            backgroundColor: isCompleted ? 'var(--success)' : isCurrent ? 'var(--primary)' : 'var(--bg-primary)',
-                            border: isCurrent ? '3px solid #93C5FD' : '2px solid var(--border)',
                             display: 'flex',
+                            flexDirection: 'column',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#FFFFFF',
-                            fontSize: '10px',
-                            fontWeight: 800,
-                            boxShadow: isCurrent ? '0 0 12px rgba(37, 99, 235, 0.4)' : 'none',
-                            transition: 'all 0.2s ease'
+                            gap: '4px',
+                            zIndex: 2,
+                            flex: 1
                           }}
                         >
-                          {isCompleted ? '✓' : idx + 1}
+                          <div
+                            style={{
+                              width: isCurrent ? '26px' : '20px',
+                              height: isCurrent ? '26px' : '20px',
+                              borderRadius: '50%',
+                              backgroundColor: isCompleted ? 'var(--success)' : isCurrent ? 'var(--primary)' : 'var(--bg-primary)',
+                              border: isCurrent ? '3px solid #93C5FD' : '2px solid var(--border)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: '#FFFFFF',
+                              fontSize: '10px',
+                              fontWeight: 800,
+                              boxShadow: isCurrent ? '0 0 12px rgba(37, 99, 235, 0.4)' : 'none',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            {isCompleted ? '✓' : idx + 1}
+                          </div>
+                          <span
+                            style={{
+                              fontSize: '10px',
+                              fontWeight: isCurrent ? 800 : 500,
+                              color: isCurrent ? 'var(--primary)' : isCompleted ? 'var(--success)' : 'var(--text-secondary)',
+                              textAlign: 'center'
+                            }}
+                          >
+                            {st.key}
+                          </span>
                         </div>
-                        <span
-                          style={{
-                            fontSize: '10px',
-                            fontWeight: isCurrent ? 800 : 500,
-                            color: isCurrent ? 'var(--primary)' : isCompleted ? 'var(--success)' : 'var(--text-secondary)',
-                            textAlign: 'center'
-                          }}
-                        >
-                          {st.key}
-                        </span>
-                      </div>
-                      {idx < stages.length - 1 && (
-                        <div
-                          style={{
-                            position: 'absolute',
-                            left: `${(idx / (stages.length - 1)) * 100}%`,
-                            width: `${(1 / (stages.length - 1)) * 100}%`,
-                            height: '3px',
-                            backgroundColor: idx < currIdx ? 'var(--success)' : 'var(--border)',
-                            zIndex: 1,
-                            top: '12px'
-                          }}
-                        />
-                      )}
-                    </React.Fragment>
-                  );
-                })}
+                        {idx < stages.length - 1 && (
+                          <div
+                            style={{
+                              position: 'absolute',
+                              left: `${(idx / (stages.length - 1)) * 100}%`,
+                              width: `${(1 / (stages.length - 1)) * 100}%`,
+                              height: '3px',
+                              backgroundColor: idx < currIdx ? 'var(--success)' : 'var(--border)',
+                              zIndex: 1,
+                              top: '12px'
+                            }}
+                          />
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Task Waves Breakdown */}

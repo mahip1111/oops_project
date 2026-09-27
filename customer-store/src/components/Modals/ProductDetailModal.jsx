@@ -96,16 +96,16 @@ export default function ProductDetailModal({
   };
 
   return (
-    <div className="drawer-overlay" onClick={() => { playAppleSound('click'); onClose(); }} style={{ alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+    <div className="drawer-overlay" onClick={() => { playAppleSound('click'); onClose(); }} style={{ alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
       <div
-        className="animate-fade-in"
+        className="animate-fade-in store-modal-content"
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
           maxWidth: '860px',
           maxHeight: '92vh',
           overflowY: 'auto',
-          padding: '36px',
+          padding: 'clamp(20px, 4vw, 36px)',
           background: '#ffffff',
           borderRadius: '24px',
           border: '1px solid var(--color-border)',
@@ -118,25 +118,26 @@ export default function ProductDetailModal({
           onClick={() => { playAppleSound('click'); onClose(); }}
           style={{
             position: 'absolute',
-            top: '20px',
-            right: '20px',
+            top: '16px',
+            right: '16px',
             background: 'rgba(0, 0, 0, 0.05)',
             border: 'none',
             color: 'var(--color-carbon)',
             borderRadius: '50%',
-            width: '36px',
-            height: '36px',
+            width: '34px',
+            height: '34px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'pointer',
-            transition: 'background 0.2s'
+            transition: 'background 0.2s',
+            zIndex: 10
           }}
         >
           <X size={18} />
         </button>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '36px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 'clamp(20px, 4vw, 36px)' }}>
           {/* Left Column: Image & Highlights */}
           <div>
             <div

@@ -50,7 +50,7 @@ export default function ProductGrid({
   }
 
   return (
-    <section id="categories" style={{ maxWidth: '1280px', margin: '0 auto', padding: '20px 32px 80px' }}>
+    <section id="categories" className="store-container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '16px 24px 60px' }}>
       {/* Category Pills Bar & Sort Toolbar */}
       <div
         style={{
@@ -58,8 +58,8 @@ export default function ProductGrid({
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '16px',
-          marginBottom: '28px'
+          gap: '12px',
+          marginBottom: '24px'
         }}
       >
         {/* Category Pills */}
@@ -69,7 +69,9 @@ export default function ProductGrid({
             gap: '8px',
             overflowX: 'auto',
             paddingBottom: '4px',
-            scrollbarWidth: 'none'
+            scrollbarWidth: 'none',
+            WebkitOverflowScrolling: 'touch',
+            maxWidth: '100%'
           }}
         >
           {CATEGORIES.map((cat) => {
@@ -86,8 +88,8 @@ export default function ProductGrid({
                   color: isActive ? '#ffffff' : 'var(--color-carbon)',
                   border: isActive ? '1px solid var(--color-carbon)' : '1px solid var(--color-border)',
                   borderRadius: '9999px',
-                  padding: '8px 18px',
-                  fontSize: '13px',
+                  padding: '7px 16px',
+                  fontSize: '12.5px',
                   fontWeight: 700,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
@@ -146,8 +148,8 @@ export default function ProductGrid({
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '24px'
+            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+            gap: '18px'
           }}
         >
           {filteredProducts.map((prod) => {

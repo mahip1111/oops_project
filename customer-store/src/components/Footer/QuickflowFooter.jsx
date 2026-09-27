@@ -3,15 +3,16 @@ import React from 'react';
 export default function QuickflowFooter({ setCurrentView, setSelectedCategory }) {
   return (
     <footer
+      className="store-container"
       style={{
         borderTop: '1px solid var(--color-border)',
         background: '#f5f5f7',
-        padding: '50px 32px 36px',
+        padding: '40px 24px 28px',
         color: 'var(--text-muted)',
         fontSize: '13px'
       }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '32px', marginBottom: '40px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '28px', marginBottom: '32px' }}>
         <div>
           <div style={{ fontWeight: 800, fontSize: '15px', letterSpacing: '0.8px', color: 'var(--color-carbon)', marginBottom: '10px' }}>
             QUICKFLOW

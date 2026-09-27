@@ -338,11 +338,18 @@ export default function App() {
     });
   };
 
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const pendingReviewCount = reviewItems.filter((i) => i.status === 'PENDING_REVIEW').length;
 
   return (
-    <div style={{ height: '100vh', display: 'flex', overflow: 'hidden', background: 'var(--bg-primary)' }}>
-      {/* Left Operations Sidebar (Fixed 100vh height, independent internal navigation scroll) */}
+    <div style={{ height: '100vh', display: 'flex', overflow: 'hidden', background: 'var(--bg-primary)', position: 'relative' }}>
+      {/* Mobile Backdrop Overlay */}
+      <div
+        className={`admin-sidebar-backdrop ${isMobileSidebarOpen ? 'backdrop-open' : ''}`}
+        onClick={() => setIsMobileSidebarOpen(false)}
+      />
+
+      {/* Left Operations Sidebar (Fixed 100vh height on desktop, drawer on mobile) */}
       <AdminSidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -350,6 +357,8 @@ export default function App() {
         reviewQueueCount={pendingReviewCount}
         activeStrategy={activeStrategy}
         kolkataAlert={metrics.warehouses?.some((w) => (w.city === 'Kolkata' || w.name?.includes('Kolkata')) && (w.capacityPercentage >= 90 || w.utilization >= 90))}
+        isOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
       />
 
       {/* Right Column: Navbar + Main View Area (Independently scrolling, 100vh full height) */}
@@ -366,10 +375,11 @@ export default function App() {
           backendStatus={backendStatus}
           isDarkMode={isDarkMode}
           setIsDarkMode={setIsDarkMode}
+          onToggleSidebar={() => setIsMobileSidebarOpen(prev => !prev)}
         />
 
         {/* Center Content View Area */}
-        <main style={{ flex: 1, padding: '20px 24px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+        <main className="admin-main-content" style={{ flex: 1, padding: '20px 24px', maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
           {activeTab === 'overview' && (
             <OverviewSection
               metrics={metrics}
