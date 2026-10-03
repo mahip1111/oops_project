@@ -2,31 +2,43 @@
 
 A modular, enterprise-grade Apple e-commerce platform paired with an automated C++ Dijkstra logistics fulfillment engine and real-time operations command center.
 
+**Author & Copyright**: © 2026 Manavendra Gupta. All Rights Reserved.  
+**License**: MIT License (Attribution required for reproduction, modification, or distribution).
+
 ---
 
 ## 📁 Project Architecture & Directories
 
 ```
 oops_project/
-├── customer-store/       # Apple Minimalist Customer Storefront (Port 3000)
-│   ├── src/components/   # Hero Carousel, Flash Deals, Track Order (GPS Map + 8-Stage Flow), Modals, Audio
+├── LICENSE                   # Official MIT License with Manavendra Gupta Copyright
+├── customer-store/           # Apple Minimalist Customer Storefront (Port 3000)
+│   ├── src/components/       # Hero Carousel, Flash Deals, Track Order (GPS Map + 8-Stage Flow), Modals, Audio
 │   └── package.json
 │
-├── admin-dashboard/      # Operations Command Center (Port 3001)
-│   ├── src/components/   # 4-Hub Grid, Live Orders Pipeline, AGV Robotics & Pickers, C++ Dijkstra Telemetry
+├── admin-dashboard/          # Operations Command Center (Port 3001)
+│   ├── src/components/       # 4-Hub Grid, Live Orders Pipeline, AGV Robotics & Pickers, C++ Dijkstra Telemetry
 │   └── package.json
 │
-├── backend-api/          # Node.js / Express REST API Gateway (Port 5000)
-│   ├── server.js         # Unified order events, hub capacity sync, and telemetry broadcast
+├── backend-api/              # Node.js / Express REST API Gateway (Port 5000)
+│   ├── server.js             # Unified order events, hub capacity sync, and telemetry broadcast
 │   └── package.json
 │
-├── cpp-engine/           # High-Performance C++ Dijkstra Logistics Engine
-│   ├── include/          # GraphRouter, Order, EventBus headers
-│   ├── src/              # Sub-millisecond routing algorithms
+├── cpp-engine/               # High-Performance C++ Dijkstra Logistics Engine (Neutralinojs Layout)
+│   ├── main.cpp              # Composition Root & Orchestrator
+│   ├── domain/               # Domain Entities (Customer, SKU, Stock, Order)
+│   ├── warehouse/            # SuperHub Network & Fleet
+│   ├── core/                 # Concurrency & State Machine Invariants
+│   ├── routing/              # Dijkstra Shortest Path Engine
+│   ├── pipeline/             # Schedulers, Task Factory & Circuit Breaker
+│   ├── observer/             # Telemetry & Observer Notification Layer
+│   ├── simulation/           # 50,000 Order What-If Benchmark Matrix
+│   ├── demo/                 # 9-Stage Architecture Demo Runner
+│   ├── tests/                # Automated Unit Test Suite
 │   └── CMakeLists.txt
 │
-├── .gitignore            # Git exclusions (node_modules, .vite, dist, logs)
-└── package.json          # Unified scripts
+├── .gitignore                # Git exclusions (node_modules, .vite, dist, logs)
+└── package.json              # Unified scripts
 ```
 
 ---
@@ -68,6 +80,8 @@ docker compose down
 
 ---
 
-## 🌟 Key Capabilities
-- **Customer Storefront**: Authentic Apple design aesthetics, Web Audio sound effects, live countdown flash deals, trade-in calculator, interactive GPS courier van route tracking, secure delivery PIN (`7510`), and 8-stage vertical fulfillment pipeline.
-- **Admin Command Center**: Real-time pallet monitoring across 4 national distribution superhubs (Delhi 72%, Mumbai 84%, Hyderabad 61%, Kolkata 96%), 1-click hub rebalancing, AGV robotics dispatch, and order retry queue.
+## 📜 License & Copyright
+
+Copyright © 2026 **Manavendra Gupta**.
+
+This software and its associated documentation files are licensed under the MIT License. You are free to use, modify, and distribute this software, provided that the original author copyright notice and license text remain intact in all copies, forks, or substantial portions of the software.

@@ -28,6 +28,17 @@ dist-ssr
 *.sln
 *.sw?
 
-# Build outputs
+# C++ Build outputs & binaries
 build/
 bin/
+*.exe
+*.out
+*.o
+*.obj
+*.pdb
+*.ilk
+*.idb
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
