@@ -195,7 +195,15 @@ export default function App() {
   };
 
   // Complete Order from Checkout Modal
-  const handleCompleteOrder = (orderPayload) => {
+  const handleCompleteOrder = async (orderPayload) => {
+    try {
+      const apiRes = await StoreApiService.submitOrder(orderPayload);
+      if (apiRes && apiRes.orderId) {
+        orderPayload.id = apiRes.orderId;
+      }
+    } catch (err) {
+      console.error('Failed to submit order to API', err);
+    }
     setOrders((prev) => [orderPayload, ...prev]);
     setPlacedOrder(orderPayload);
     setCart([]);

@@ -1,0 +1,30 @@
+{
+  "applicationId": "js.neutralino.zero",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "documentRoot": "/www/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "nativeAllowList": [
+    "app.*"
+  ],
+  "modes": {
+    "window": {
+      "title": "Hello Neutralinojs",
+      "width": 800,
+      "height": 500,
+      "minWidth": 400,
+      "minHeight": 200,
+      "icon": "/www/icon.png"
+    }
+  },
+  "cli": {
+    "binaryName": "neutralinojs-zero",
+    "resourcesPath": "/www/",
+    "extensionsPath": "/extensions/",
+    "clientLibrary": "/www/neutralino.js",
+    "binaryVersion": "6.10.0",
+    "clientVersion": "nightly"
+  }
+}

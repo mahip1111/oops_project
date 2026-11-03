@@ -92,6 +92,11 @@ export default function App() {
 
   // Check Backend Health & Establish WebSocket on Mount
   useEffect(() => {
+    AdminApiService.fetchOrders().then((orderData) => {
+      if (orderData && orderData.list) {
+        setOrders(orderData.list);
+      }
+    });
     AdminApiService.checkBackendHealth().then((status) => {
       setBackendStatus(status);
       if (status.schedulingStrategy) setActiveStrategy(status.schedulingStrategy);
@@ -100,7 +105,9 @@ export default function App() {
     // Connect to WebSocket API
     let ws;
     try {
-      ws = new WebSocket('ws://localhost:5000');
+      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsHost = window.location.hostname || 'localhost';
+      ws = new WebSocket(wsProtocol + "//" + wsHost + ":5000");
       ws.onopen = () => {
         setBackendStatus({ connected: true });
       };
@@ -143,7 +150,7 @@ export default function App() {
   // Action: Transition Order State (PRD Section 4 & 7: State Machine Protection)
   const handleTransitionOrderState = async (orderId, targetState, reason) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/orders/${orderId}/transition`, {
+      const res = await fetch(`/api/orders/${orderId}/transition`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ targetState, reason })
@@ -200,7 +207,7 @@ export default function App() {
   // Action: Rebalance Kolkata Hub (96%) -> Hyderabad (61%)
   const handleConfirmRebalance = async ({ fromHub, toHub, transferPercent }) => {
     try {
-      await fetch('http://localhost:5000/api/warehouses/rebalance', { method: 'POST' });
+      await fetch('/api/warehouses/rebalance', { method: 'POST' });
     } catch (e) {}
 
     setMetrics((prev) => ({
@@ -237,7 +244,7 @@ export default function App() {
   const handleStrategyChange = async (newStrat) => {
     setActiveStrategy(newStrat);
     try {
-      await fetch('http://localhost:5000/api/scheduling/strategy', {
+      await fetch('/api/scheduling/strategy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ strategy: newStrat })
@@ -248,7 +255,7 @@ export default function App() {
   // Action: Handle Review Queue Retry
   const handleRetryReviewItem = async (reviewId) => {
     try {
-      await fetch(`http://localhost:5000/api/review-queue/${reviewId}/retry`, { method: 'POST' });
+      await fetch(`/api/review-queue/${reviewId}/retry`, { method: 'POST' });
     } catch (e) {}
 
     setReviewItems((prev) =>
@@ -265,7 +272,7 @@ export default function App() {
   // Action: Handle Review Queue Reroute
   const handleRerouteReviewItem = async (reviewId, newHub) => {
     try {
-      await fetch(`http://localhost:5000/api/review-queue/${reviewId}/reroute`, {
+      await fetch(`/api/review-queue/${reviewId}/reroute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ newHub })

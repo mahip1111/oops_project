@@ -42,7 +42,7 @@ export const AdminApiService = {
   // Fetch Orders List
   async fetchOrders() {
     try {
-      const res = await fetch(`${BASE_URL}/admin/orders`);
+      const res = await fetch(`${BASE_URL}/orders`);
       if (res.ok) return await res.json();
     } catch (e) {}
     return INITIAL_ORDERS_ROSTER;
@@ -51,7 +51,7 @@ export const AdminApiService = {
   // Trigger Order Retry / Status Update
   async retryFailedOrder(orderId) {
     try {
-      const res = await fetch(`${BASE_URL}/admin/orders/${orderId}/retry`, { method: 'POST' });
+      const res = await fetch(`${BASE_URL}/orders/${orderId}/retry`, { method: 'POST' });
       if (res.ok) return await res.json();
     } catch (e) {}
     return { success: true, orderId, newStatus: 'Processing', message: `Order ${orderId} re-queued for fulfillment!` };
@@ -60,7 +60,7 @@ export const AdminApiService = {
   // Fetch Warehouses & Capacities
   async fetchWarehouses() {
     try {
-      const res = await fetch(`${BASE_URL}/admin/warehouses`);
+      const res = await fetch(`${BASE_URL}/warehouses`);
       if (res.ok) return await res.json();
     } catch (e) {}
     return INITIAL_METRICS.warehouses;
@@ -69,7 +69,7 @@ export const AdminApiService = {
   // Rebalance Warehouse Hub Load (e.g. shift Kolkata 96% load to Hyderabad / Delhi)
   async rebalanceHub({ fromHubId, toHubId, transferPercent = 15 }) {
     try {
-      const res = await fetch(`${BASE_URL}/admin/warehouses/rebalance`, {
+      const res = await fetch(`${BASE_URL}/warehouses/rebalance`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fromHubId, toHubId, transferPercent })
@@ -85,7 +85,7 @@ export const AdminApiService = {
   // Fetch Workers Roster
   async fetchWorkers() {
     try {
-      const res = await fetch(`${BASE_URL}/admin/workers`);
+      const res = await fetch(`${BASE_URL}/workers`);
       if (res.ok) return await res.json();
     } catch (e) {}
     return INITIAL_WORKERS_ROSTER;
@@ -94,7 +94,7 @@ export const AdminApiService = {
   // Update Worker Status (Available, Busy, Offline)
   async updateWorkerStatus(workerId, newStatus) {
     try {
-      const res = await fetch(`${BASE_URL}/admin/workers/${workerId}/status`, {
+      const res = await fetch(`${BASE_URL}/workers/${workerId}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -107,7 +107,7 @@ export const AdminApiService = {
   // Fetch Tasks Queue
   async fetchTasks() {
     try {
-      const res = await fetch(`${BASE_URL}/admin/tasks`);
+      const res = await fetch(`${BASE_URL}/tasks`);
       if (res.ok) return await res.json();
     } catch (e) {}
     return INITIAL_TASKS_ROSTER;
@@ -116,7 +116,7 @@ export const AdminApiService = {
   // Create or Assign Task
   async assignTask(taskId, workerName) {
     try {
-      const res = await fetch(`${BASE_URL}/admin/tasks/${taskId}/assign`, {
+      const res = await fetch(`${BASE_URL}/tasks/${taskId}/assign`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ workerName })

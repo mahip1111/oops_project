@@ -1,44 +1,13 @@
-# Logs
-logs
+# Developer tools' files
+.lite_workspace.lua
+
+# Neutralinojs binaries and builds
+/bin
+/dist
+
+# Neutralinojs client (minified)
+neutralino.js
+
+# Neutralinojs related files
+.storage
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Node dependencies
-node_modules
-dist
-dist-ssr
-*.local
-
-# Vite cache
-.vite
-.vite/
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# C++ Build outputs & binaries
-build/
-bin/
-*.exe
-*.out
-*.o
-*.obj
-*.pdb
-*.ilk
-*.idb
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
-CTestTestfile.cmake
